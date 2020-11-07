@@ -17,12 +17,13 @@ const getRandomSimpleArrayOfElements = (amount) => {
   return elements;
 };
 const getRandomArrayOfElements = (amount, elements) => {
-  shuffleElements(new Array(amount).fill(``).map((element, index) => (element = elements[index])));
+  const newElements = shuffleElements(new Array(amount).fill(``).map((element, index) => (element = elements[index])));
+  return newElements;
 };
 const getRandomStrokeOfElements = (elements) => {
   const lengthOfListElements = getRandom(1, elements.length);
-  getRandomArrayOfElements(lengthOfListElements, elements);
-  // console.log(getRandomArrayOfElements(lengthOfListElements, elements));
+  const newElements = getRandomArrayOfElements(lengthOfListElements, elements);
+  return newElements;
 };
 
 window.utils = {

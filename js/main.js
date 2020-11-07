@@ -13,7 +13,7 @@ const TITLES = [
 const HOUSE_NAMES = [`palace`, `flat`, `house`, `bungalow`];
 const HOURS = [`12:00`, `13:00`, `14:00`];
 const FEATURES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
-const HOTEL_FOTOS = [
+const HOTEL_PHOTOS = [
   `http://o0.github.io/assets/images/tokyo/hotel1.jpg`,
   `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
   `http://o0.github.io/assets/images/tokyo/hotel3.jpg`
@@ -59,7 +59,7 @@ const generatePins = (amount) => {
         checkout: window.utils.getRandomFrom(HOURS),
         features: window.utils.getRandomStrokeOfElements(FEATURES),
         description: `это что-то незабываемое`,
-        photos: window.utils.getRandomStrokeOfElements(HOTEL_FOTOS),
+        photos: window.utils.getRandomStrokeOfElements(HOTEL_PHOTOS),
       },
       location: {
         x: locationX,
@@ -97,3 +97,5 @@ const renderPins = (pins) => {
 activatePage();
 const pins = generatePins(PINS_AMOUNT);
 renderPins(pins);
+
+window.pins = pins;
