@@ -19,10 +19,8 @@ const HOTEL_FOTOS = [
   `http://o0.github.io/assets/images/tokyo/hotel3.jpg`
 ];
 const PINS_AMOUNT = 8;
-const PIN_WIDTH = 65;
-const PIN_HEIGHT = 65;
-const PIN_POINTER_WIDTH = 10;
-const PIN_POINTER_HEIGHT = 22;
+const PIN_WIDTH = 50;
+const PIN_HEIGHT = 70;
 
 
 const pinTemplate = document.querySelector(`#pin`)
@@ -89,7 +87,7 @@ const generatePins = (amount) => {
 const renderPin = (pin) => {
   const pinElement = pinTemplate.cloneNode(true);
 
-  pinElement.style = `left: ${pin.location.x - (PIN_WIDTH + PIN_POINTER_WIDTH) / 2}px; top: ${pin.location.y - (PIN_HEIGHT + PIN_POINTER_HEIGHT) / 2}px;`;
+  pinElement.style = `left: ${pin.location.x - PIN_WIDTH / 2}px; top: ${pin.location.y - PIN_HEIGHT / 2}px;`;
   pinElement.querySelector(`img`).src = pin.author.avatar;
   pinElement.querySelector(`img`).alt = pin.offer.title;
 
