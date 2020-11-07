@@ -79,7 +79,7 @@ const renderPin = (pin) => {
   .querySelector(`.map__pin`);
   const pinElement = pinTemplate.cloneNode(true);
 
-  pinElement.style = `left: ${pin.location.x - PIN_WIDTH / 2}px; top: ${pin.location.y - PIN_HEIGHT / 2}px;`;
+  pinElement.style = `left: ${pin.location.x - PIN_WIDTH / 2}px; top: ${pin.location.y - PIN_HEIGHT}px;`;
   pinElement.querySelector(`img`).src = pin.author.avatar;
   pinElement.querySelector(`img`).alt = pin.offer.title;
 
