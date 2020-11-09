@@ -64,5 +64,9 @@ const renderCard = (pin) => {
   filtersContainer.insertAdjacentElement(`beforeBegin`, card);
 };
 
-const currentPin = window.pins[PINS_NUMBER];
-renderCard(currentPin);
+const currentPin = window.render.pins[PINS_NUMBER];
+
+window.card = {
+  currentPin,
+  renderCard
+};
