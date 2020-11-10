@@ -58,9 +58,7 @@ const abledElements = (elements) => {
 
 // default opening
 const disactivatePage = () => {
-  adForm.classList.remove(`ad-form--disabled`);
   disabledElements(adFormFields);
-  mapFilters.style.opacity = `1`;
   disabledElements(mapFiltersSelects);
   disabledElements(mapFiltersFeatures);
   disabledElements(mapFiltersLabels);
@@ -69,11 +67,11 @@ const disactivatePage = () => {
 disactivatePage();
 
 const activatePage = () => {
+  adForm.classList.remove(`ad-form--disabled`);
   window.render.renderPins(window.render.pins);
   window.card.renderCard(window.card.currentPin);
   document.querySelector(`.map`).classList.remove(`map--faded`);
   abledElements(adFormFields);
-  mapFilters.style.opacity = `1`;
   abledElements(mapFiltersSelects);
   abledElements(mapFiltersFeatures);
   abledElements(mapFiltersLabels);
