@@ -83,6 +83,7 @@ const disactivatePage = () => {
   window.card.renderCard(window.card.currentPin);
   document.querySelector(`.map__card`).classList.add(`hidden`);
   window.render.renderPins(window.render.pins);
+
   currentPins = document.querySelectorAll(`.map__pin:not(.map__pin--main)`);
 
   disabledElements(currentPins);
@@ -91,13 +92,13 @@ const disactivatePage = () => {
   disabledElements(mapFiltersFeatures);
   disabledElements(mapFiltersLabels);
   adressForm.value = Math.round(FormAdressValue.LEFT) + `, ` + Math.round(FormAdressValue.TOP_INITIAL);
+  adressForm.setAttribute(`readonly`, `readonly`);
   return currentPins;
 };
 disactivatePage();
 
 const activatePage = () => {
   adForm.classList.remove(`ad-form--disabled`);
-  document.querySelector(`.map__card`).classList.remove(`hidden`);
   document.querySelector(`.map`).classList.remove(`map--faded`);
   abledElements(currentPins);
   abledElements(adFormFields);
@@ -121,92 +122,95 @@ mapPinMain.addEventListener(`keydown`, (evt) => {
   }
 });
 
-// annoy
-adForm.querySelector(`#title`).value = `Милая, уютная квартирка в центре Токио`;
-adForm.querySelector(`#price`).value = `5000`;
+// prefill
+let capacityValue = capacityForm.value;
+let roomAmountValue = roomAmountForm.value;
+let titleValue = titleForm.value;
+let typeValue = typeForm.value;
+let priceValue = priceForm.value;
+let timeinValue = timeinForm.value;
+let timeoutValue = timeoutForm.value;
+priceForm.placeholder = priceTypeValue[`${typeValue}`];
+
+capacityForm.addEventListener(`change`, () => {
+  capacityValue = capacityForm.value;
+  capacityForm.setCustomValidity(``);
+  capacityForm.style.outline = `none`;
+  capacityForm.reportValidity();
+  return capacityValue;
+});
+roomAmountForm.addEventListener(`change`, () => {
+  roomAmountValue = roomAmountForm.value;
+  capacityForm.setCustomValidity(``);
+  capacityForm.style.outline = `none`;
+  roomAmountForm.reportValidity();
+  return roomAmountValue;
+});
+
+titleForm.addEventListener(`input`, (evt) => {
+  titleValue = titleForm.value;
+  if (titleValue.length < MIN_TITLE_LENGTH) {
+    titleForm.setCustomValidity(`Минимальная длина заголовка объявления 30 символов. Допишите ещё ${MIN_TITLE_LENGTH - titleValue.length} симв.`);
+    titleForm.style.outline = `2px solid orange`;
+    evt.preventDefault();
+  } else if (titleValue.length > MAX_TITLE_LENGTH) {
+    titleForm.setCustomValidity(`Максимальная длина заголовка объявления 100 символов. Удалите лишние ${titleValue.length - MAX_TITLE_LENGTH} симв.`);
+    titleForm.style.outline = `2px solid orange`;
+    evt.preventDefault();
+  } else {
+    titleForm.setCustomValidity(``);
+    titleForm.style.outline = `none`;
+    titleValue = titleForm.value;
+  }
+
+  titleForm.reportValidity();
+});
+
+typeForm.addEventListener(`change`, () => {
+  typeValue = typeForm.value;
+  priceForm.placeholder = priceTypeValue[`${typeValue}`];
+  priceForm.setCustomValidity(``);
+  priceForm.style.outline = `none`;
+  typeForm.reportValidity();
+  return typeValue;
+});
+priceForm.addEventListener(`change`, () => {
+  priceValue = priceForm.value;
+  priceForm.placeholder = priceTypeValue[`${typeValue}`];
+  priceForm.setCustomValidity(``);
+  priceForm.style.outline = `none`;
+  priceForm.reportValidity();
+  return priceValue;
+});
+
+let isValidOfTime = timeinValue === timeoutValue;
+timeinForm.addEventListener(`change`, () => {
+  timeinValue = timeinForm.value;
+  timeoutValue = timeoutForm.value;
+  isValidOfTime = timeinValue === timeoutValue;
+  if (!isValidOfTime) {
+    timeoutForm.value = timeinValue;
+  } else {
+    timeoutForm.setCustomValidity(``);
+    timeoutForm.style.outline = `none`;
+  }
+});
+timeoutForm.addEventListener(`change`, () => {
+  timeinValue = timeinForm.value;
+  timeoutValue = timeoutForm.value;
+  isValidOfTime = timeinValue === timeoutValue;
+  if (!isValidOfTime) {
+    timeinForm.value = timeoutValue;
+  } else {
+    timeoutForm.setCustomValidity(``);
+    timeoutForm.style.outline = `none`;
+  }
+});
 
 // validation
 adForm.addEventListener(`submit`, (evt) => {
-  evt.preventDefault();
-  let capacityValue = capacityForm.value;
-  let roomAmountValue = roomAmountForm.value;
-  let titleValue = titleForm.value;
-  let typeValue = typeForm.value;
-  let priceValue = priceForm.value;
-  let timeinValue = timeinForm.value;
-  let timeoutValue = timeoutForm.value;
-
-  titleForm.addEventListener(`input`, () => {
-    titleValue = titleForm.value;
-    evt.preventDefault();
-    if (titleValue.length < MIN_TITLE_LENGTH) {
-      titleForm.setCustomValidity(`Минимальная длина заголовка объявления 30 символов. Допишите ещё ${MIN_TITLE_LENGTH - titleValue.length} симв.`);
-      titleForm.style.outline = `2px solid orange`;
-      evt.preventDefault();
-    } else if (titleValue.length > MAX_TITLE_LENGTH) {
-      titleForm.setCustomValidity(`Максимальная длина заголовка объявления 100 символов. Удалите лишние ${titleValue.length - MAX_TITLE_LENGTH} симв.`);
-      titleForm.style.outline = `2px solid orange`;
-      evt.preventDefault();
-    } else {
-      titleForm.setCustomValidity(``);
-      titleForm.style.outline = `none`;
-      titleValue = titleForm.value;
-    }
-
-    titleForm.reportValidity();
-  });
-
-  capacityForm.addEventListener(`change`, () => {
-    capacityValue = capacityForm.value;
-    capacityForm.setCustomValidity(``);
-    capacityForm.style.outline = `none`;
-    return capacityValue;
-  });
-  roomAmountForm.addEventListener(`change`, () => {
-    roomAmountValue = roomAmountForm.value;
-    capacityForm.setCustomValidity(``);
-    capacityForm.style.outline = `none`;
-    return roomAmountValue;
-  });
   const isValidOfAmountGuest = formGuestValue[`${roomAmountValue}`].some((element) => (parseInt(element, 10) === parseInt(capacityValue, 10)));
-
-  typeForm.addEventListener(`change`, () => {
-    typeValue = typeForm.value;
-    priceForm.placeholder = priceTypeValue[`${typeValue}`];
-    priceForm.setCustomValidity(``);
-    priceForm.style.outline = `none`;
-    return typeValue;
-  });
-  priceForm.addEventListener(`change`, () => {
-    priceValue = priceForm.value;
-    priceForm.placeholder = priceTypeValue[`${typeValue}`];
-    priceForm.setCustomValidity(``);
-    priceForm.style.outline = `none`;
-    return priceValue;
-  });
   const isValidOfPriceType = priceValue >= priceTypeValue[`${typeValue}`];
-
-  const isValidOfTime = timeinValue === timeoutValue;
-  timeinForm.addEventListener(`change`, () => {
-    timeinValue = timeinForm.value;
-    if (!isValidOfTime) {
-      timeinValue = timeoutValue;
-    } else {
-      timeoutForm.setCustomValidity(``);
-      timeoutForm.style.outline = `none`;
-    }
-    return timeinValue;
-  });
-  timeoutForm.addEventListener(`change`, () => {
-    timeoutValue = timeoutForm.value;
-    if (!isValidOfTime) {
-      timeoutValue = timeinValue;
-    } else {
-      timeoutForm.setCustomValidity(``);
-      timeoutForm.style.outline = `none`;
-    }
-    return timeoutValue;
-  });
 
   if (!isValidOfAmountGuest) {
     capacityForm.setCustomValidity(alertGuestValue[roomAmountValue]);
@@ -221,20 +225,12 @@ adForm.addEventListener(`submit`, (evt) => {
     titleForm.setCustomValidity(`Длина заголовка объявления от 30 до 100 символов.`);
     titleForm.style.outline = `2px solid orange`;
     evt.preventDefault();
-  } else if (!isValidOfTime) {
-    timeoutForm.setCustomValidity(`Время въезда и выезда должно совпадать.`);
-    evt.preventDefault();
   } else {
     capacityForm.setCustomValidity(``);
     capacityForm.style.outline = `none`;
     priceForm.setCustomValidity(``);
     priceForm.style.outline = `none`;
-    timeoutForm.setCustomValidity(``);
-    timeoutForm.style.outline = `none`;
   }
 
-  capacityForm.reportValidity();
-  roomAmountForm.reportValidity();
-  timeoutForm.reportValidity();
   adForm.reportValidity();
 });

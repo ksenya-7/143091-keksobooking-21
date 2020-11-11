@@ -53,13 +53,15 @@ const renderCard = (pin) => {
   card.querySelector(`.popup__description`).textContent = pin.offer.description;
   card.querySelector(`.popup__photos`).innerHTML = ``;
   renderPhotos(pin.offer.photos, card.querySelector(`.popup__photos`));
-  card.querySelector(`.popup__avatar`).src = pin.author.avatar;
 
   CARD_CLASSES.forEach((element) => {
     if (card.querySelector(`.${element}`).innerHTML === ``) {
       card.querySelector(`.${element}`).style.display = `none`;
     }
   });
+
+  card.querySelector(`.popup__avatar`).src = pin.author.avatar;
+  card.querySelector(`.popup__avatar`).style.display = `block`;
 
   filtersContainer.insertAdjacentElement(`beforeBegin`, card);
 };
