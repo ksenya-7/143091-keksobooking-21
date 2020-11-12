@@ -61,7 +61,7 @@ const disactivatePage = (elements) => {
   return currentPins;
 };
 
-window.backend.load(disactivatePage, () => {});
+window.backend.load(disactivatePage, window.error.openCreatedErrorMessage);
 
 
 const activatePage = () => {
