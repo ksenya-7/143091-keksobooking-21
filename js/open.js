@@ -45,14 +45,13 @@ const abledElements = (elements) => {
 };
 
 let currentPins = ``;
-const disactivatePage = () => {
-  window.card.renderCard(window.card.currentPin);
-  document.querySelector(`.map__card`).classList.add(`hidden`);
-  window.render.renderPins(window.render.pins);
+const disactivatePage = (elements) => {
+  window.renderPins(elements);
 
   currentPins = document.querySelectorAll(`.map__pin:not(.map__pin--main)`);
 
   disabledElements(currentPins);
+  window.openCards(elements, currentPins);
   disabledElements(adFormFields);
   disabledElements(mapFiltersSelects);
   disabledElements(mapFiltersFeatures);
@@ -61,7 +60,9 @@ const disactivatePage = () => {
   adressForm.setAttribute(`readonly`, `readonly`);
   return currentPins;
 };
-disactivatePage();
+
+window.backend.load(disactivatePage, () => {});
+
 
 const activatePage = () => {
   document.querySelector(`.ad-form`).classList.remove(`ad-form--disabled`);
@@ -72,7 +73,6 @@ const activatePage = () => {
   abledElements(mapFiltersFeatures);
   abledElements(mapFiltersLabels);
   adressForm.value = Math.round(FormAdressValue.LEFT) + `, ` + Math.round(FormAdressValue.TOP);
-  window.openCards(currentPins);
   mapPinMain.querySelector(`img`).draggable = `true`;
 };
 

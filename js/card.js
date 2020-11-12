@@ -1,6 +1,5 @@
 'use strict';
 
-const PINS_NUMBER = 0;
 const CARD_CLASSES = [`popup__title`, `popup__text--address`, `popup__text--price`, `popup__type`, `popup__text--capacity`, `popup__text--time`, `popup__features`, `popup__description`, `popup__photos`, `popup__avatar`];
 const filtersContainer = document.querySelector(`.map__filters-container`);
 const templateCard = document.querySelector(`#card`).content
@@ -66,9 +65,5 @@ const renderCard = (pin) => {
   filtersContainer.insertAdjacentElement(`beforeBegin`, card);
 };
 
-const currentPin = window.render.pins[PINS_NUMBER];
 
-window.card = {
-  currentPin,
-  renderCard
-};
+window.renderCard = renderCard;
