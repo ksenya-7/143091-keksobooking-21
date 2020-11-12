@@ -97,6 +97,4 @@ const pins = generatePins(PINS_AMOUNT);
 window.render = {
   pins,
   renderPins,
-  PIN_WIDTH,
-  PIN_HEIGHT
 };
