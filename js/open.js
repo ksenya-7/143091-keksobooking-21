@@ -2,10 +2,10 @@
 
 const PIN_MAIN_WIDTH = 65;
 const PIN_MAIN_HEIGHT = 87;
-const DRAG_LEFT = 2;
-const DRAG_RIGHT = 1196;
-const DRAG_TOP = 129;
-const DRAG_BOTTOM = 627;
+const DRAG_LEFT = 0;
+const DRAG_RIGHT = 1201;
+const DRAG_TOP = 130;
+const DRAG_BOTTOM = 630;
 const adFormFields = document.querySelector(`.ad-form`).children;
 const adressForm = document.querySelector(`#address`);
 const mapFilters = document.querySelector(`.map__filters `);
@@ -96,7 +96,7 @@ mapPinMain.addEventListener(`mousedown`, (evt) => {
     x: evt.clientX,
     y: evt.clientY,
   };
-  const getAdress = (left, right) => Math.round(parseInt(left, 10) + PIN_MAIN_WIDTH / 2) + `, ` + Math.round(parseInt(right, 10) + PIN_MAIN_HEIGHT);
+  const getAdress = (left, right) => Math.floor(parseInt(left, 10) + PIN_MAIN_WIDTH / 2) + `, ` + Math.floor(parseInt(right, 10) + PIN_MAIN_HEIGHT);
 
   const onMouseMove = (moveEvt) => {
     moveEvt.preventDefault();
@@ -111,18 +111,18 @@ mapPinMain.addEventListener(`mousedown`, (evt) => {
       y: moveEvt.clientY
     };
 
-    if (parseInt(mapPinMain.style.top, 10) > DRAG_BOTTOM - PIN_MAIN_HEIGHT) {
+    if (mapPinMain.offsetTop - shift.y > DRAG_BOTTOM - PIN_MAIN_HEIGHT) {
       mapPinMain.style.top = DRAG_BOTTOM - PIN_MAIN_HEIGHT + `px`;
-    } else if (parseInt(mapPinMain.style.top, 10) < DRAG_TOP - PIN_MAIN_HEIGHT) {
+    } else if (mapPinMain.offsetTop - shift.y < DRAG_TOP - PIN_MAIN_HEIGHT) {
       mapPinMain.style.top = DRAG_TOP - PIN_MAIN_HEIGHT + `px`;
     } else {
       mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + `px`;
       adressForm.value = getAdress(mapPinMain.style.left, mapPinMain.style.top);
     }
 
-    if (parseInt(mapPinMain.style.left, 10) > DRAG_RIGHT - PIN_MAIN_WIDTH / 2) {
+    if (mapPinMain.offsetLeft - shift.x > DRAG_RIGHT - PIN_MAIN_WIDTH / 2) {
       mapPinMain.style.left = DRAG_RIGHT - PIN_MAIN_WIDTH / 2 + `px`;
-    } else if (parseInt(mapPinMain.style.left, 10) < DRAG_LEFT - PIN_MAIN_WIDTH / 2) {
+    } else if (mapPinMain.offsetLeft - shift.x < DRAG_LEFT - PIN_MAIN_WIDTH / 2) {
       mapPinMain.style.left = DRAG_LEFT - PIN_MAIN_WIDTH / 2 + `px`;
     } else {
       mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + `px`;
