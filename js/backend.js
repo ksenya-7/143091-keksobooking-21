@@ -14,7 +14,7 @@ const StatusError = {
   404: `Ничего не найдено`,
 };
 
-const onXhrLoad = (xhr, onLoad, onError) => () => {
+const onXhrLoad = (xhr, onLoad, onError) => {
   let error;
   switch (xhr.status) {
     case SUCCESS_REQUEST:
@@ -35,7 +35,7 @@ const loadOrSaveXhr = (method, onLoad, onError, url, data) => {
   const xhr = new XMLHttpRequest();
   xhr.responseType = `json`;
 
-  xhr.addEventListener(`load`, onXhrLoad(xhr, onLoad, onError));
+  xhr.addEventListener(`load`, onXhrLoad.bind(null, xhr, onLoad, onError));
 
   xhr.timeout = TIMEOUT;
 
