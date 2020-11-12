@@ -1,32 +1,15 @@
 'use strict';
 
-const PIN_MAIN_WIDTH = 65;
-const PIN_MAIN_HEIGHT = 87;
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
-
 const adForm = document.querySelector(`.ad-form`);
-const adFormFields = adForm.children;
 const titleForm = adForm.querySelector(`#title`);
-const adressForm = adForm.querySelector(`#address`);
 const typeForm = adForm.querySelector(`#type`);
 const priceForm = adForm.querySelector(`#price`);
 const capacityForm = adForm.querySelector(`#capacity`);
 const roomAmountForm = adForm.querySelector(`#room_number`);
 const timeinForm = adForm.querySelector(`#timein`);
 const timeoutForm = adForm.querySelector(`#timeout`);
-
-const mapFilters = document.querySelector(`.map__filters `);
-const mapFiltersSelects = mapFilters.querySelectorAll(`select`);
-const mapFiltersFeatures = mapFilters.querySelectorAll(`input`);
-const mapFiltersLabels = mapFilters.querySelectorAll(`label`);
-const mapPinMain = document.querySelector(`.map__pin--main`);
-
-const FormAdressValue = {
-  LEFT: parseInt(mapPinMain.style.left, 10) + PIN_MAIN_WIDTH / 2,
-  TOP_INITIAL: parseInt(mapPinMain.style.top, 10) + PIN_MAIN_WIDTH / 2,
-  TOP: parseInt(mapPinMain.style.top, 10) + PIN_MAIN_HEIGHT
-};
 
 const priceTypeValue = {
   'bungalow': 0,
@@ -53,74 +36,6 @@ const formGuestValue = {
   '3': [1, 2, 3],
   '100': [0]
 };
-
-const disabledElements = (elements) => {
-  for (let element of elements) {
-    if (element.tagName === `INPUT`) {
-      element.setAttribute(`disabled`, `disabled`);
-    } else if (element.tagName === `BUTTON`) {
-      element.classList.add(`hidden`);
-    } else {
-      element.setAttribute(`disabled`, `true`);
-    }
-  }
-};
-
-const abledElements = (elements) => {
-  for (let element of elements) {
-    if (element.tagName === `INPUT`) {
-      element.removeAttribute(`disabled`, `disabled`);
-    } else if (element.tagName === `BUTTON`) {
-      element.classList.remove(`hidden`);
-    } else {
-      element.removeAttribute(`disabled`, `true`);
-    }
-  }
-};
-
-let currentPins = ``;
-const disactivatePage = () => {
-  window.card.renderCard(window.card.currentPin);
-  document.querySelector(`.map__card`).classList.add(`hidden`);
-  window.render.renderPins(window.render.pins);
-
-  currentPins = document.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-
-  disabledElements(currentPins);
-  disabledElements(adFormFields);
-  disabledElements(mapFiltersSelects);
-  disabledElements(mapFiltersFeatures);
-  disabledElements(mapFiltersLabels);
-  adressForm.value = Math.round(FormAdressValue.LEFT) + `, ` + Math.round(FormAdressValue.TOP_INITIAL);
-  adressForm.setAttribute(`readonly`, `readonly`);
-  return currentPins;
-};
-disactivatePage();
-
-const activatePage = () => {
-  adForm.classList.remove(`ad-form--disabled`);
-  document.querySelector(`.map`).classList.remove(`map--faded`);
-  abledElements(currentPins);
-  abledElements(adFormFields);
-  abledElements(mapFiltersSelects);
-  abledElements(mapFiltersFeatures);
-  abledElements(mapFiltersLabels);
-  adressForm.value = Math.round(FormAdressValue.LEFT) + `, ` + Math.round(FormAdressValue.TOP);
-  window.openCards(currentPins);
-};
-
-mapPinMain.addEventListener(`mousedown`, (evt) => {
-  if (evt.button === 0) {
-    activatePage();
-  }
-});
-
-mapPinMain.addEventListener(`keydown`, (evt) => {
-  evt.preventDefault();
-  if (window.utils.isEnter(evt)) {
-    activatePage();
-  }
-});
 
 // prefill
 let capacityValue = capacityForm.value;
