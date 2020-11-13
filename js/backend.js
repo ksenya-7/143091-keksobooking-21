@@ -44,7 +44,7 @@ const loadOrSaveXhr = (method, onLoad, onError, url, data) => {
   });
 
   xhr.addEventListener(`error`, () => {
-    window.successError.openErrorMessage();
+    window.error.openErrorMessage();
   });
 
   xhr.open(method, url);

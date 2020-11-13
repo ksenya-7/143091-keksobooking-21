@@ -29,11 +29,11 @@ const removeElementAndListener = (element, cbEsc, cbClick) => {
 const closeSuccessMessage = () => {
   removeElementAndListener(successElement, onSuccessMessageEscPress, onSuccessMessageClick);
 };
-const openSuccessMessage = () => {
+const onLoadSuccess = () => {
   addElementAndListener(successElement, successButton, closeSuccessMessage, onSuccessMessageEscPress, onSuccessMessageClick);
 };
 const onSuccessMessageEscPress = (evt) => {
-  if (window.util.isEscape(evt)) {
+  if (window.utils.isEscape(evt)) {
     evt.preventDefault();
     removeElementAndListener(successElement, onSuccessMessageEscPress, onSuccessMessageClick);
   }
@@ -47,11 +47,11 @@ const onSuccessMessageClick = (evt) => {
 const closeErrorMessage = () => {
   removeElementAndListener(errorElement, onErrorMessageEscPress, onErrorMessageClick);
 };
-const openErrorMessage = () => {
+const onLoadFormError = () => {
   addElementAndListener(errorElement, errorButton, closeErrorMessage, onErrorMessageEscPress, onErrorMessageClick);
 };
 const onErrorMessageEscPress = (evt) => {
-  if (window.util.isEscape(evt)) {
+  if (window.utils.isEscape(evt)) {
     evt.preventDefault();
     removeElementAndListener(errorElement, onErrorMessageEscPress, onErrorMessageClick);
   }
@@ -70,12 +70,12 @@ const addElementWithNewTextAndListener = (message, element, elementButton, cbClo
   document.addEventListener(`click`, cbClick);
 };
 
-const openCreatedErrorMessage = (message) => {
+const onLoadError = (message) => {
   addElementWithNewTextAndListener(message, errorElement, errorButton, closeErrorMessage, onErrorMessageEscPress, onErrorMessageClick);
 };
 
 window.error = {
-  openSuccessMessage,
-  openCreatedErrorMessage,
-  openErrorMessage
+  onLoadSuccess,
+  onLoadError,
+  onLoadFormError
 };

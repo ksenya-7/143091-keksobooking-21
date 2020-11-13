@@ -16,6 +16,9 @@ const renderPin = (pin) => {
   pinElement.querySelector(`img`).src = pin.author.avatar;
   pinElement.querySelector(`img`).alt = pin.offer.title;
 
+  if (pin.offer === null || pin.offer === undefined) {
+    return null;
+  }
   return pinElement;
 };
 
