@@ -22,14 +22,12 @@ const renderPin = (pin) => {
   return pinElement;
 };
 
-const onLoadSuccess = (elements) => {
+const renderPins = (elements) => {
   const fragment = document.createDocumentFragment();
 
   elements.map(renderPin).forEach((element) => fragment.append(element));
 
   mapPins.append(fragment);
-  const currentPins = document.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-  window.openCards(elements, currentPins);
 };
 
-window.onLoadSuccess = onLoadSuccess;
+window.renderPins = renderPins;

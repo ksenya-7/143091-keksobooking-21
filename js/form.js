@@ -126,26 +126,37 @@ timeoutForm.addEventListener(`change`, () => {
 adForm.addEventListener(`submit`, (evt) => {
   const isValidOfAmountGuest = formGuestValue[`${roomAmountValue}`].some((element) => (parseInt(element, 10) === parseInt(capacityValue, 10)));
   const isValidOfPriceType = priceValue >= priceTypeValue[`${typeValue}`];
-
+  evt.preventDefault();
   if (!isValidOfAmountGuest) {
     capacityForm.setCustomValidity(alertGuestValue[roomAmountValue]);
     capacityForm.style.outline = `2px solid orange`;
-    evt.preventDefault();
   } else if (!isValidOfPriceType) {
     priceForm.setCustomValidity(alertPriceValue[typeValue]);
     priceForm.placeholder = priceTypeValue[`${typeValue}`];
     priceForm.style.outline = `2px solid orange`;
-    evt.preventDefault();
   } else if (titleValue.length < MIN_TITLE_LENGTH || titleValue.length > MAX_TITLE_LENGTH) {
     titleForm.setCustomValidity(`Длина заголовка объявления от 30 до 100 символов.`);
     titleForm.style.outline = `2px solid orange`;
-    evt.preventDefault();
   } else {
-    capacityForm.setCustomValidity(``);
-    capacityForm.style.outline = `none`;
-    priceForm.setCustomValidity(``);
-    priceForm.style.outline = `none`;
+    window.backend.save(new FormData(adForm), () => {
+      window.disactivatePage();
+      window.cancelOldValues();
+      window.error.onLoadSuccessMessage();
+    });
   }
 
   adForm.reportValidity();
 });
+
+// Доработайте обработчик отправки формы, который вы делали в задании «Личный проект:
+// доверяй, но проверяй», так чтобы он отменял действие формы по умолчанию и отправлял
+// данные формы на сервер посредством XHR https://21.javascript.pages.academy/keksobooking.
+// После успешной передачи данных на сервер верните страницу в неактивное состояние и сбросьте форму.
+// Если отправка данных прошла успешно, показывается соответствующее сообщение. Разметка
+// сообщения находится блоке #success внутри шаблона template. Сообщение должно исчезать
+// по нажатию на клавишу Esc и по клику на произвольную область экрана.
+// Если при отправке данных произошла ошибка запроса, покажите соответствующее сообщение.
+// Разметку сообщения, которая находится в блоке #error в шаблоне template, нужно разместить
+// в main. Сообщение должно исчезать после нажатия на кнопку .error__button, по нажатию
+// на клавишу Esc и по клику на произвольную область экрана.
+// Добавьте обработчик кнопке очистки формы.
