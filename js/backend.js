@@ -1,7 +1,7 @@
 'use strict';
 
 const SUCCESS_REQUEST = 200;
-const TIMEOUT = 50;
+const TIMEOUT = 5000;
 
 const Url = {
   URL_DATA: `https://21.javascript.pages.academy/keksobooking/data`,

@@ -17,7 +17,7 @@ const addElementAndListener = (element, elementButton, cbClose, cbEsc, cbClick) 
   main.append(element);
   elementButton.addEventListener(`click`, cbClose);
   document.addEventListener(`keydown`, cbEsc);
-  document.addEventListener(`click`, cbClick);
+  document.addEventListener(`mousedown`, cbClick);
 };
 
 const removeElementAndListener = (element, cbEsc, cbClick) => {
@@ -62,16 +62,16 @@ const onErrorMessageClick = (evt) => {
 };
 
 
-const addElementWithNewTextAndListener = (message, element, elementButton, cbClose, cbEsc) => {
+const addElementWithNewTextAndListener = (message, element, elementButton, cbClose, cbEsc, cbClick) => {
   errorText.textContent = message;
   main.append(element);
   elementButton.addEventListener(`click`, cbClose);
   document.addEventListener(`keydown`, cbEsc);
+  document.addEventListener(`mousedown`, cbClick);
 };
 
 const onLoadErrorMessage = (message) => {
   addElementWithNewTextAndListener(message, errorElement, errorButton, closeErrorMessage, onErrorMessageEscPress, onErrorMessageClick);
-  // document.addEventListener(`click`, onErrorMessageClick);
 };
 
 window.error = {
