@@ -1,7 +1,7 @@
 'use strict';
 
-let cardPopup = document.querySelector(`.map__card`);
-let cardPopupClose = cardPopup.querySelector(`.popup__close`);
+let cardPopup = null;
+let cardPopupClose = null;
 
 const onCardPopupEscPress = (evt) => {
   if (window.utils.isEscape(evt)) {
@@ -16,22 +16,21 @@ const closeCardPopup = () => {
   document.removeEventListener(`click`, closeCardPopup);
 };
 
-const openCards = (elements) => {
-  const pinsForCard = window.render.pins;
-  for (let i = 0; i < elements.length; i++) {
-    elements[i].addEventListener(`click`, () => {
-      cardPopup.remove();
-      window.card.renderCard(pinsForCard[i]);
+const openCards = (elements, currentElements) => {
+  let pinsForCard = elements.slice();
+  for (let i = 0; i < currentElements.length; i++) {
+    currentElements[i].addEventListener(`click`, () => {
+      if (cardPopup !== null) {
+        cardPopup.remove();
+      }
+      window.renderCard(pinsForCard[i]);
       cardPopup = document.querySelector(`.map__card`);
-      cardPopupClose = cardPopup.querySelector(`button`);
+      cardPopupClose = cardPopup.querySelector(`.popup__close`);
 
       cardPopupClose.addEventListener(`click`, closeCardPopup);
       document.addEventListener(`keydown`, onCardPopupEscPress);
     });
   }
 };
-
-cardPopupClose.addEventListener(`click`, closeCardPopup);
-document.addEventListener(`keydown`, onCardPopupEscPress);
 
 window.openCards = openCards;

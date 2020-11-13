@@ -19,25 +19,26 @@ const shuffleElements = (elements) => {
   return newElements;
 };
 
-const getRandomSimpleArrayOfElements = (amount) => {
-  const elements = shuffleElements(new Array(amount).fill(``).map((element, index) => (element = index + 1)));
-  return elements;
-};
-const getRandomArrayOfElements = (amount, elements) => {
-  const newElements = shuffleElements(new Array(amount).fill(``).map((element, index) => (element = elements[index])));
-  return newElements;
-};
-const getRandomStrokeOfElements = (elements) => {
-  const lengthOfListElements = getRandom(1, elements.length);
-  const newElements = getRandomArrayOfElements(lengthOfListElements, elements);
-  return newElements;
-};
+// const getRandomSimpleArrayOfElements = (amount) => {
+//   const elements = shuffleElements(new Array(amount).fill(``).map((element, index) => (element = index + 1)));
+//   return elements;
+// };
+// const getRandomArrayOfElements = (amount, elements) => {
+//   const newElements = shuffleElements(new Array(amount).fill(``).map((element, index) => (element = elements[index])));
+//   return newElements;
+// };
+// const getRandomStrokeOfElements = (elements) => {
+//   const lengthOfListElements = getRandom(1, elements.length);
+//   const newElements = getRandomArrayOfElements(lengthOfListElements, elements);
+//   return newElements;
+// };
 
 window.utils = {
   isEscape,
   isEnter,
   getRandom,
   getRandomFrom,
-  getRandomSimpleArrayOfElements,
-  getRandomStrokeOfElements
+  shuffleElements
+  // getRandomSimpleArrayOfElements,
+  // getRandomStrokeOfElements
 };
