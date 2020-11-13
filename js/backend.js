@@ -1,7 +1,7 @@
 'use strict';
 
 const SUCCESS_REQUEST = 200;
-const TIMEOUT = 5000;
+const TIMEOUT = 50;
 
 const Url = {
   URL_DATA: `https://21.javascript.pages.academy/keksobooking/data`,
@@ -44,7 +44,7 @@ const loadOrSaveXhr = (method, onLoad, onError, url, data) => {
   });
 
   xhr.addEventListener(`error`, () => {
-    window.error.openErrorMessage();
+    window.error.onLoadErrorMessage();
   });
 
   xhr.open(method, url);

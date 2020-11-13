@@ -29,7 +29,7 @@ const removeElementAndListener = (element, cbEsc, cbClick) => {
 const closeSuccessMessage = () => {
   removeElementAndListener(successElement, onSuccessMessageEscPress, onSuccessMessageClick);
 };
-const onLoadSuccess = () => {
+const onLoadSuccessMessage = () => {
   addElementAndListener(successElement, successButton, closeSuccessMessage, onSuccessMessageEscPress, onSuccessMessageClick);
 };
 const onSuccessMessageEscPress = (evt) => {
@@ -47,7 +47,7 @@ const onSuccessMessageClick = (evt) => {
 const closeErrorMessage = () => {
   removeElementAndListener(errorElement, onErrorMessageEscPress, onErrorMessageClick);
 };
-const onLoadFormError = () => {
+const onLoadFormErrorMessage = () => {
   addElementAndListener(errorElement, errorButton, closeErrorMessage, onErrorMessageEscPress, onErrorMessageClick);
 };
 const onErrorMessageEscPress = (evt) => {
@@ -62,20 +62,20 @@ const onErrorMessageClick = (evt) => {
 };
 
 
-const addElementWithNewTextAndListener = (message, element, elementButton, cbClose, cbEsc, cbClick) => {
+const addElementWithNewTextAndListener = (message, element, elementButton, cbClose, cbEsc) => {
   errorText.textContent = message;
   main.append(element);
   elementButton.addEventListener(`click`, cbClose);
   document.addEventListener(`keydown`, cbEsc);
-  document.addEventListener(`click`, cbClick);
 };
 
-const onLoadError = (message) => {
+const onLoadErrorMessage = (message) => {
   addElementWithNewTextAndListener(message, errorElement, errorButton, closeErrorMessage, onErrorMessageEscPress, onErrorMessageClick);
+  // document.addEventListener(`click`, onErrorMessageClick);
 };
 
 window.error = {
-  onLoadSuccess,
-  onLoadError,
-  onLoadFormError
+  onLoadSuccessMessage,
+  onLoadErrorMessage,
+  onLoadFormErrorMessage
 };

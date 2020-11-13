@@ -40,12 +40,6 @@ const abledElements = (elements) => {
   }
 };
 
-const generatePins = (elements) => {
-  window.renderPins(elements);
-  const currentPins = document.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-  window.openCards(elements, currentPins);
-};
-
 const removePins = () => {
   document.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach((element) => element.remove());
 };
@@ -62,7 +56,7 @@ const disactivatePage = () => {
 disactivatePage();
 
 const activatePage = () => {
-  window.backend.load(generatePins, window.error.onLoadError);
+  window.backend.load(window.onLoadSuccess, window.error.onLoadErrorMessage);
 
   document.querySelector(`.ad-form`).classList.remove(`ad-form--disabled`);
   document.querySelector(`.map`).classList.remove(`map--faded`);
