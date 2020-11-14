@@ -5,7 +5,6 @@ const successTemplate = document
 .querySelector(`#success`)
 .content.querySelector(`.success`);
 const successElement = successTemplate.cloneNode(true);
-const successButton = successElement.querySelector(`.success__button`);
 const errorTemplate = document
 .querySelector(`#error`)
 .content.querySelector(`.error`);
@@ -23,14 +22,13 @@ const addElementAndListener = (element, elementButton, cbClose, cbEsc, cbClick) 
 const removeElementAndListener = (element, cbEsc, cbClick) => {
   element.remove();
   document.removeEventListener(`keydown`, cbEsc);
-  document.removeEventListener(`click`, cbClick);
+  document.removeEventListener(`mousedown`, cbClick);
 };
 
-const closeSuccessMessage = () => {
-  removeElementAndListener(successElement, onSuccessMessageEscPress, onSuccessMessageClick);
-};
 const onLoadSuccessMessage = () => {
-  addElementAndListener(successElement, successButton, closeSuccessMessage, onSuccessMessageEscPress, onSuccessMessageClick);
+  main.append(successElement);
+  document.addEventListener(`keydown`, onSuccessMessageEscPress);
+  document.addEventListener(`mousedown`, onSuccessMessageClick);
 };
 const onSuccessMessageEscPress = (evt) => {
   if (window.utils.isEscape(evt)) {
@@ -61,17 +59,12 @@ const onErrorMessageClick = (evt) => {
   removeElementAndListener(errorElement, onErrorMessageEscPress, onErrorMessageClick);
 };
 
-
-const addElementWithNewTextAndListener = (message, element, elementButton, cbClose, cbEsc, cbClick) => {
-  errorText.textContent = message;
-  main.append(element);
-  elementButton.addEventListener(`click`, cbClose);
-  document.addEventListener(`keydown`, cbEsc);
-  document.addEventListener(`mousedown`, cbClick);
-};
-
 const onLoadErrorMessage = (message) => {
-  addElementWithNewTextAndListener(message, errorElement, errorButton, closeErrorMessage, onErrorMessageEscPress, onErrorMessageClick);
+  errorText.textContent = message;
+  main.append(errorElement);
+  errorButton.addEventListener(`click`, closeErrorMessage);
+  document.addEventListener(`keydown`, onErrorMessageEscPress);
+  document.addEventListener(`mousedown`, onErrorMessageClick);
 };
 
 window.error = {

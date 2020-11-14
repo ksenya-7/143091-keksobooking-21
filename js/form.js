@@ -17,6 +17,7 @@ const priceTypeValue = {
   'house': 5000,
   'palace': 10000
 };
+
 const alertPriceValue = {
   'bungalow': `«Бунгало» — минимальная цена за ночь 0`,
   'flat': `«Квартира» — минимальная цена за ночь 1 000`,
@@ -45,7 +46,7 @@ let typeValue = typeForm.value;
 let priceValue = priceForm.value;
 let timeinValue = timeinForm.value;
 let timeoutValue = timeoutForm.value;
-priceForm.placeholder = priceTypeValue[`${typeValue}`];
+// priceForm.placeholder = priceTypeValue[`${typeValue}`];
 
 capacityForm.addEventListener(`change`, () => {
   capacityValue = capacityForm.value;
@@ -123,29 +124,31 @@ timeoutForm.addEventListener(`change`, () => {
 });
 
 // validation
-adForm.addEventListener(`submit`, (evt) => {
+const onAdFormSubmit = () => {
   const isValidOfAmountGuest = formGuestValue[`${roomAmountValue}`].some((element) => (parseInt(element, 10) === parseInt(capacityValue, 10)));
   const isValidOfPriceType = priceValue >= priceTypeValue[`${typeValue}`];
 
   if (!isValidOfAmountGuest) {
     capacityForm.setCustomValidity(alertGuestValue[roomAmountValue]);
     capacityForm.style.outline = `2px solid orange`;
-    evt.preventDefault();
   } else if (!isValidOfPriceType) {
     priceForm.setCustomValidity(alertPriceValue[typeValue]);
     priceForm.placeholder = priceTypeValue[`${typeValue}`];
     priceForm.style.outline = `2px solid orange`;
-    evt.preventDefault();
   } else if (titleValue.length < MIN_TITLE_LENGTH || titleValue.length > MAX_TITLE_LENGTH) {
     titleForm.setCustomValidity(`Длина заголовка объявления от 30 до 100 символов.`);
     titleForm.style.outline = `2px solid orange`;
-    evt.preventDefault();
   } else {
-    capacityForm.setCustomValidity(``);
-    capacityForm.style.outline = `none`;
-    priceForm.setCustomValidity(``);
-    priceForm.style.outline = `none`;
+    window.backend.save(new FormData(adForm), () => {
+      window.disactivatePage();
+      window.error.onLoadSuccessMessage();
+    }, window.error.onLoadFormErrorMessage);
   }
 
   adForm.reportValidity();
-});
+};
+
+window.form = {
+  onAdFormSubmit,
+  priceTypeValue
+};
