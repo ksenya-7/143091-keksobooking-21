@@ -8,10 +8,11 @@ const Url = {
   URL: `https://21.javascript.pages.academy/keksobooking`,
 };
 
-const StatusError = {
+const StatusCode = {
   400: `Неверный запрос`,
   401: `Пользователь не авторизован`,
   404: `Ничего не найдено`,
+  500: `Internal Server Error`
 };
 
 const onXhrLoad = (xhr, onLoad, onError) => {
@@ -20,7 +21,7 @@ const onXhrLoad = (xhr, onLoad, onError) => {
     case SUCCESS_REQUEST:
       onLoad(xhr.response);
       break;
-    case (xhr.status) : error = StatusError[xhr.status];
+    case (xhr.status) : error = StatusCode[xhr.status];
       break;
     default:
       error = `Cтатус ответа: : ` + xhr.status + ` ` + xhr.statusText;

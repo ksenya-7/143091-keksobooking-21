@@ -13,6 +13,7 @@ const FormAdressValue = {
   TOP_INITIAL: parseInt(document.querySelector(`.map__pin--main`).style.top, 10) + PIN_MAIN_WIDTH_FOR_ACTIVE / 2,
   TOP: parseInt(document.querySelector(`.map__pin--main`).style.top, 10) + PIN_MAIN_HEIGHT_FOR_ACTIVE
 };
+document.querySelector(`#address`).value = Math.round(FormAdressValue.LEFT) + `, ` + Math.round(FormAdressValue.TOP);
 
 const abledElements = (elements) => {
   for (let element of elements) {
@@ -41,7 +42,6 @@ const activatePage = () => {
   abledElements(adFormFields);
   abledElements(mapFiltersSelects);
   abledElements(mapFiltersFeatures);
-  document.querySelector(`#address`).value = Math.round(FormAdressValue.LEFT) + `, ` + Math.round(FormAdressValue.TOP);
   document.querySelector(`.map__pin--main`).querySelector(`img`).draggable = `true`;
   document.querySelector(`.map__pin--main`).removeEventListener(`click`, onMainPinClick);
   document.querySelector(`.map__pin--main`).removeEventListener(`keydown`, onMainPinKeydown);
@@ -84,6 +84,9 @@ const onResetFormKeydown = (evt) => {
 document.querySelector(`.ad-form`).addEventListener(`submit`, (evt) => {
   evt.preventDefault();
   window.onAdFormSubmit();
+  document.querySelector(`.map__filters`).reset();
+  document.querySelector(`.ad-form`).reset();
+  window.disactivatePage();
   document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
   document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
 });

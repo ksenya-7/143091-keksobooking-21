@@ -35,9 +35,6 @@ const disactivatePage = () => {
   document.querySelector(`#address`).value = Math.round(FormAdressValueForOpen.LEFT) + `, ` + Math.round(FormAdressValueForOpen.TOP_INITIAL);
   document.querySelector(`.map__pin--main`).style.left = `570px`;
   document.querySelector(`.map__pin--main`).style.top = `375px`;
-  if (document.querySelector(`.price`) !== null) {
-    document.querySelector(`.price`).placeholder = `1000`;
-  }
   document.querySelector(`#address`).setAttribute(`readonly`, `readonly`);
   document.querySelector(`.map__pin--main`).addEventListener(`mousedown`, window.onMouseDown);
 };

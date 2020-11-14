@@ -141,9 +141,10 @@ const onAdFormSubmit = () => {
     window.backend.save(new FormData(adForm), () => {
       window.disactivatePage();
       window.error.onLoadSuccessMessage();
-    });
+    }, window.error.onLoadFormErrorMessage);
   }
 
   adForm.reportValidity();
 };
+
 window.onAdFormSubmit = onAdFormSubmit;

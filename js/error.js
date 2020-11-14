@@ -11,20 +11,20 @@ const errorTemplate = document
 const errorElement = errorTemplate.cloneNode(true);
 const errorButton = errorElement.querySelector(`.error__button`);
 const errorText = errorElement.querySelector(`.error__message`);
-// 1 раз используется
+
 const addElementAndListener = (element, elementButton, cbClose, cbEsc, cbClick) => {
   main.append(element);
   elementButton.addEventListener(`click`, cbClose);
   document.addEventListener(`keydown`, cbEsc);
   document.addEventListener(`mousedown`, cbClick);
 };
-// 5 раз используется
+
 const removeElementAndListener = (element, cbEsc, cbClick) => {
   element.remove();
   document.removeEventListener(`keydown`, cbEsc);
   document.removeEventListener(`mousedown`, cbClick);
 };
-// 1 раз используется
+
 const onLoadSuccessMessage = () => {
   main.append(successElement);
   document.addEventListener(`keydown`, onSuccessMessageEscPress);
@@ -58,7 +58,6 @@ const onErrorMessageClick = (evt) => {
   evt.preventDefault();
   removeElementAndListener(errorElement, onErrorMessageEscPress, onErrorMessageClick);
 };
-
 
 const onLoadErrorMessage = (message) => {
   errorText.textContent = message;
