@@ -13,7 +13,16 @@ const FormAdressValue = {
   TOP_INITIAL: parseInt(document.querySelector(`.map__pin--main`).style.top, 10) + PIN_MAIN_WIDTH_FOR_ACTIVE / 2,
   TOP: parseInt(document.querySelector(`.map__pin--main`).style.top, 10) + PIN_MAIN_HEIGHT_FOR_ACTIVE
 };
+const priceTypeValueDefault = {
+  'bungalow': 0,
+  'flat': 1000,
+  'house': 5000,
+  'palace': 10000
+};
+
 document.querySelector(`#address`).value = Math.round(FormAdressValue.LEFT) + `, ` + Math.round(FormAdressValue.TOP);
+let type = document.querySelector(`#type`).value;
+document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
 
 const abledElements = (elements) => {
   for (let element of elements) {
@@ -67,6 +76,7 @@ const onResetFormClick = (evt) =>{
   document.querySelector(`.map__filters`).reset();
   document.querySelector(`.ad-form`).reset();
   window.disactivatePage();
+  document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
   document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
   document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
 };
@@ -76,6 +86,7 @@ const onResetFormKeydown = (evt) => {
     document.querySelector(`.map__filters`).reset();
     document.querySelector(`.ad-form`).reset();
     window.disactivatePage();
+    document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
     document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
     document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
   }
@@ -83,10 +94,11 @@ const onResetFormKeydown = (evt) => {
 
 document.querySelector(`.ad-form`).addEventListener(`submit`, (evt) => {
   evt.preventDefault();
-  window.onAdFormSubmit();
+  window.form.onAdFormSubmit();
   document.querySelector(`.map__filters`).reset();
   document.querySelector(`.ad-form`).reset();
   window.disactivatePage();
+  document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
   document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
   document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
 });

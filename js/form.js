@@ -17,6 +17,7 @@ const priceTypeValue = {
   'house': 5000,
   'palace': 10000
 };
+
 const alertPriceValue = {
   'bungalow': `«Бунгало» — минимальная цена за ночь 0`,
   'flat': `«Квартира» — минимальная цена за ночь 1 000`,
@@ -45,7 +46,7 @@ let typeValue = typeForm.value;
 let priceValue = priceForm.value;
 let timeinValue = timeinForm.value;
 let timeoutValue = timeoutForm.value;
-priceForm.placeholder = priceTypeValue[`${typeValue}`];
+// priceForm.placeholder = priceTypeValue[`${typeValue}`];
 
 capacityForm.addEventListener(`change`, () => {
   capacityValue = capacityForm.value;
@@ -147,4 +148,7 @@ const onAdFormSubmit = () => {
   adForm.reportValidity();
 };
 
-window.onAdFormSubmit = onAdFormSubmit;
+window.form = {
+  onAdFormSubmit,
+  priceTypeValue
+};
