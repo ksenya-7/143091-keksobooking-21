@@ -1,49 +1,63 @@
 'use strict';
 
 const mapFilters = document.querySelector(`.map__filters`);
-// const housingType = mapFilters.querySelector(`#housing-type`);
-// const housingPrice = mapFilters.querySelectorAll(`.housing-price`);
-// const housingRooms = mapFilters.querySelectorAll(`.housing-rooms`);
-// const housingGuests = mapFilters.querySelectorAll(`.housing-guests`);
-// const mapInputFeatures = mapFilters.querySelectorAll(`.map__checkbox`);
+const housingType = mapFilters.querySelector(`#housing-type`);
+const housingPrice = mapFilters.querySelector(`#housing-price`);
+const housingRooms = mapFilters.querySelector(`#housing-rooms`);
+const housingGuests = mapFilters.querySelector(`#housing-guests`);
+const housingFeatures = mapFilters.querySelector(`#housing-features`);
+
 // const mapLabelFeatures = mapFilters.querySelectorAll(`.map__feature`);
 
-const getFilteredPins = (elements, type) => elements.filter((element) => type === `any` ? true : element.offer.type === type)
-.filter((element) => {
-  // console.log(type);
-  if (type === `any`) {
-    // console.log(parseInt(element.offer.price, 10) > 10000 && parseInt(element.offer.price, 10) < 50000);
-    // console.log(type);
-    return true;
-  } else if (type === `middle`) {
-    // console.log(type);
-    // console.log(type === `middle`);
-    return parseInt(element.offer.price, 10) > 10000 && parseInt(element.offer.price, 10) < 50000;
-  } else if (type === `low`) {
-    return parseInt(element.offer.price, 10) < 10000;
-  } else if (type === `high`) {
-    return parseInt(element.offer.price, 10) > 50000;
+const filterByType = (element) => housingType.value === `any` ? true : housingType.value === element.offer.type;
+const filterByPrice = (element) => {
+  const price = parseInt(element.offer.price, 10);
+  let result = true;
+  switch (housingPrice.value) {
+    case `any`:
+      result = true;
+      break;
+    case `middle`:
+      result = price >= 10000 && price <= 50000;
+      break;
+    case `low`:
+      result = price < 10000;
+      break;
+    case `high`:
+      result = price > 50000;
+      break;
   }
-  return true;
-});
+  return result;
+};
+const filterByRooms = (element) => housingRooms.value === `any` ? true : parseInt(housingRooms.value, 10) === element.offer.rooms;
+const filterByGuests = (element) => housingGuests.value === `any` ? true : parseInt(housingGuests.value, 10) === element.offer.guests;
+const filterByFeatures = (element) => {
+  const features = element.offer.features;
+  const checkedInputs = housingFeatures.querySelectorAll(`input[type=checkbox]:checked`);
+  const checkedFeatures = [].map.call(checkedInputs, (input) => input.value);
+  // let result = true;
+  return checkedFeatures.every((el) => features.includes(el));
+  // console.log(checkedFeatures);
+  // for (let i = 0; i < checkedInputs.length; i++) {
+  //   console.log(checkedInputs[i].value);
+  //   for (let j = 0; j < checkedFeatures.length; j++) {
+  //     result = checkedFeatures.some(checkedInputs[i].value === element.offer.features[j]);
+  //   }
+  // }
+  // console.log(result);
+  // return checkedInputs[i].value;
+  // return result;
+};
 
 const debouncedRenderSetOfPins = window.debounce(window.renderPins);
 
-// let filteredPins = [];
 const filtersHandler = (elements) => {
-  let filteredPins = [];
-  mapFilters.addEventListener(`change`, (evt) => {
-    console.log(evt.target.value);
-    filteredPins = getFilteredPins(elements, evt.target.value);
+  mapFilters.addEventListener(`change`, () => {
+    const filteredPins = elements.filter(filterByType).filter(filterByPrice).filter(filterByRooms).filter(filterByGuests).filter(filterByFeatures);
     // console.log(filteredPins);
-    // filteredPins = getHousingPricePins(filteredPins, evt.target.value);
     debouncedRenderSetOfPins(filteredPins);
-    // console.log(filteredPins);
   });
 };
-
-// Неправильно. Вся логика условия должна быть в коллбэке filter. Массив должен фильтроваться
-// и потом отрисовываться. shuffleElements использовать нельзя, массив не должен перемешиваться случайно
 
 window.filtersHandler = filtersHandler;
 
@@ -54,5 +68,3 @@ window.filtersHandler = filtersHandler;
 // применяются вместе: один фильтр не отменяет другие, выбранные до него. Например, после
 // выбора типа жилья можно указать диапазон стоимости и дополнения и в этом случае,
 // на карте должны показываться только те метки, которые подходят под все условия.
-// Как в изначальном состоянии, так и при изменении фильтра, на карте должно показываться
-// не более 5 меток, независимо от выбранного фильтра.

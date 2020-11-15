@@ -38,10 +38,7 @@ const onLoadSuccess = (elements) => {
   loadPins = elements.slice();
 
   window.renderPins(loadPins);
-
   window.filtersHandler(loadPins);
-
-  // return loadPins;
 };
 
 const activatePage = () => {
