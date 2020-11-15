@@ -28,6 +28,9 @@ const renderPins = (elements) => {
   elements.map(renderPin).forEach((element) => fragment.append(element));
 
   mapPins.append(fragment);
+
+  const currentPins = document.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+  window.openCards(elements, currentPins);
 };
 
 window.renderPins = renderPins;

@@ -3,9 +3,8 @@
 const PIN_MAIN_WIDTH_FOR_ACTIVE = 65;
 const PIN_MAIN_HEIGHT_FOR_ACTIVE = 87;
 const adFormFields = document.querySelector(`.ad-form`).children;
-const mapFilters = document.querySelector(`.map__filters `);
-const mapFiltersSelects = mapFilters.querySelectorAll(`select`);
-const mapFiltersFeatures = mapFilters.querySelectorAll(`input`);
+const mapFiltersSelects = document.querySelectorAll(`select`);
+const mapFiltersFeatures = document.querySelectorAll(`input`);
 const resetForm = document.querySelector(`.ad-form__reset`);
 
 const FormAdressValue = {
@@ -20,7 +19,7 @@ const priceTypeValueDefault = {
   'palace': 10000
 };
 
-document.querySelector(`#address`).value = Math.round(FormAdressValue.LEFT) + `, ` + Math.round(FormAdressValue.TOP);
+document.querySelector(`#address`).value = Math.round(FormAdressValue.LEFT) + `, ` + Math.round(FormAdressValue.TOP_INITIAL);
 let type = document.querySelector(`#type`).value;
 document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
 
@@ -33,14 +32,16 @@ const abledElements = (elements) => {
     }
   }
 };
+
 let loadPins = [];
 const onLoadSuccess = (elements) => {
   loadPins = elements.slice();
-  window.renderPins(loadPins);
-  const currentPins = document.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-  window.openCards(loadPins, currentPins);
 
-  return loadPins;
+  // window.renderPins(loadPins);
+
+  window.filtersHandler(loadPins);
+
+  // return loadPins;
 };
 
 const activatePage = () => {
