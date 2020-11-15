@@ -37,7 +37,7 @@ let loadPins = [];
 const onLoadSuccess = (elements) => {
   loadPins = elements.slice();
 
-  // window.renderPins(loadPins);
+  window.renderPins(loadPins);
 
   window.filtersHandler(loadPins);
 

@@ -2,6 +2,7 @@
 
 const PIN_WIDTH = 50;
 const PIN_HEIGHT = 70;
+const AMOUNT_PINS = 5;
 
 const map = document.querySelector(`.map`);
 const mapPins = map.querySelector(`.map__pins`);
@@ -23,9 +24,12 @@ const renderPin = (pin) => {
 };
 
 const renderPins = (elements) => {
+  const renderedPins = elements.slice(0, AMOUNT_PINS);
+  document.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach((element) => (element.remove()));
+  document.querySelectorAll(`.popup`).forEach((element) => (element.remove()));
   const fragment = document.createDocumentFragment();
 
-  elements.map(renderPin).forEach((element) => fragment.append(element));
+  renderedPins.map(renderPin).forEach((element) => fragment.append(element));
 
   mapPins.append(fragment);
 
