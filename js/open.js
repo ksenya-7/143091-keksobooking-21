@@ -36,6 +36,12 @@ const disactivatePage = () => {
   document.querySelector(`.map__pin--main`).style.left = `570px`;
   document.querySelector(`.map__pin--main`).style.top = `375px`;
   document.querySelector(`#address`).setAttribute(`readonly`, `readonly`);
+  document.querySelector(`.ad-form-header__preview img`).src = `img/muffin-grey.svg`;
+  document.querySelectorAll(`.ad-form__photo`).forEach((element) => {
+    if (element.hasChildNodes()) {
+      element.remove();
+    }
+  });
   document.querySelector(`.map__pin--main`).addEventListener(`mousedown`, window.onMouseDown);
 };
 
