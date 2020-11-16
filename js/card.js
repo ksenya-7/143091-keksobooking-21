@@ -40,7 +40,6 @@ const renderPhotos = (elements, container) => {
 
 const renderCard = (pin) => {
   const card = templateCard.cloneNode(true);
-  // console.trace(pin);
   card.querySelector(`.popup__title`).textContent = pin.offer.title;
   card.querySelector(`.popup__text--address`).textContent = pin.offer.address;
   card.querySelector(`.popup__text--price`).textContent = `${pin.offer.price}₽/ночь`;
