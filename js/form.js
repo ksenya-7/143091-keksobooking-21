@@ -2,6 +2,8 @@
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
+const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
+
 const adForm = document.querySelector(`.ad-form`);
 const titleForm = adForm.querySelector(`#title`);
 const typeForm = adForm.querySelector(`#type`);
@@ -11,20 +13,25 @@ const roomAmountForm = adForm.querySelector(`#room_number`);
 const timeinForm = adForm.querySelector(`#timein`);
 const timeoutForm = adForm.querySelector(`#timeout`);
 
+const fileAvaChooser = adForm.querySelector(`.ad-form-header__input`);
+const previewAva = adForm.querySelector(`.ad-form-header__preview img`);
+const photoContainer = adForm.querySelector(`.ad-form__photo-container`);
+const fileHouseChooser = adForm.querySelector(`.ad-form__input`);
+const previewHouseBlockTemplate = adForm.querySelector(`.ad-form__photo`).cloneNode(true);
+adForm.querySelector(`.ad-form__photo`).style.display = `none`;
+
 const priceTypeValue = {
   'bungalow': 0,
   'flat': 1000,
   'house': 5000,
   'palace': 10000
 };
-
 const alertPriceValue = {
   'bungalow': `«Бунгало» — минимальная цена за ночь 0`,
   'flat': `«Квартира» — минимальная цена за ночь 1 000`,
   'house': `«Дом» — минимальная цена 5 000`,
   'palace': `«Дворец» — минимальная цена 10 000`
 };
-
 const alertGuestValue = {
   '1': `1 комната — «для 1 гостя»`,
   '2': `2 комнаты — «для 2 гостей» или «для 1 гостя»`,
@@ -37,6 +44,55 @@ const formGuestValue = {
   '3': [1, 2, 3],
   '100': [0]
 };
+
+// загрузка внешнего файла
+let matchesAva = true;
+fileAvaChooser.addEventListener(`change`, () => {
+  const file = fileAvaChooser.files[0];
+  const fileName = file.name.toLowerCase();
+  previewAva.src = ``;
+  matchesAva = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matchesAva) {
+    const reader = new FileReader();
+    reader.addEventListener(`load`, () => {
+      previewAva.src = reader.result;
+    });
+    reader.addEventListener(`error`, window.error.onLoadErrorMessage);
+    reader.readAsDataURL(file);
+  } else {
+    window.error.onLoadErrorMessage(`Ошибка загрузки файла`);
+  }
+});
+
+let matchesHouse = true;
+fileHouseChooser.addEventListener(`change`, () => {
+  const file = fileHouseChooser.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const previewHouse = document.createElement(`img`);
+  previewHouse.alt = `Фото жилья`;
+  previewHouse.width = `70`;
+  previewHouse.height = `70`;
+  previewHouse.src = ``;
+  const previewHouseBlock = previewHouseBlockTemplate.cloneNode(true);
+  previewHouseBlock.append(previewHouse);
+  photoContainer.append(previewHouseBlock);
+
+  matchesHouse = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matchesHouse) {
+    const reader = new FileReader();
+
+    reader.addEventListener(`load`, () => {
+      previewHouse.src = reader.result;
+    });
+    reader.addEventListener(`error`, window.error.onLoadErrorMessage);
+    reader.readAsDataURL(file);
+  } else {
+    window.error.onLoadErrorMessage(`Ошибка загрузки файла`);
+  }
+});
 
 // prefill
 let capacityValue = capacityForm.value;

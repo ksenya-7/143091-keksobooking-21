@@ -20,7 +20,7 @@ const priceTypeValueDefault = {
 };
 
 document.querySelector(`#address`).value = Math.round(FormAdressValue.LEFT) + `, ` + Math.round(FormAdressValue.TOP_INITIAL);
-let type = document.querySelector(`#type`).value;
+const type = document.querySelector(`#type`).value;
 document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
 
 const abledElements = (elements) => {
@@ -74,6 +74,7 @@ const onResetFormClick = (evt) =>{
   document.querySelector(`.map__filters`).reset();
   document.querySelector(`.ad-form`).reset();
   window.disactivatePage();
+
   document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
   document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
   document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
@@ -100,5 +101,6 @@ document.querySelector(`.ad-form`).addEventListener(`submit`, (evt) => {
   document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
   document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
 });
+
 resetForm.addEventListener(`click`, onResetFormClick);
 resetForm.addEventListener(`keydown`, onResetFormKeydown);
