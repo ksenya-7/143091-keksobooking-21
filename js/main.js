@@ -1,27 +1,18 @@
 'use strict';
 
-const PIN_MAIN_WIDTH_FOR_ACTIVE = 65;
-const PIN_MAIN_HEIGHT_FOR_ACTIVE = 87;
+// const PIN_MAIN_WIDTH_FOR_ACTIVE = 65;
+// const PIN_MAIN_HEIGHT_FOR_ACTIVE = 87;
 const adFormFields = document.querySelector(`.ad-form`).children;
 const mapFiltersSelects = document.querySelectorAll(`select`);
 const mapFiltersFeatures = document.querySelectorAll(`input`);
 const resetForm = document.querySelector(`.ad-form__reset`);
 
-const FormAdressValue = {
-  LEFT: parseInt(document.querySelector(`.map__pin--main`).style.left, 10) + PIN_MAIN_WIDTH_FOR_ACTIVE / 2,
-  TOP_INITIAL: parseInt(document.querySelector(`.map__pin--main`).style.top, 10) + PIN_MAIN_WIDTH_FOR_ACTIVE / 2,
-  TOP: parseInt(document.querySelector(`.map__pin--main`).style.top, 10) + PIN_MAIN_HEIGHT_FOR_ACTIVE
-};
 const priceTypeValueDefault = {
   'bungalow': 0,
   'flat': 1000,
   'house': 5000,
   'palace': 10000
 };
-
-document.querySelector(`#address`).value = Math.round(FormAdressValue.LEFT) + `, ` + Math.round(FormAdressValue.TOP_INITIAL);
-const type = document.querySelector(`#type`).value;
-document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
 
 const abledElements = (elements) => {
   for (let element of elements) {
@@ -31,6 +22,7 @@ const abledElements = (elements) => {
       element.removeAttribute(`disabled`, `true`);
     }
   }
+  document.querySelector(`.map__features`).style.opacity = `1`;
 };
 
 let loadPins = [];
@@ -66,15 +58,18 @@ const onMainPinKeydown = (evt) => {
   }
 };
 
+let type = document.querySelector(`#type`).value;
+
 document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
 document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
 
-const onResetFormClick = (evt) =>{
+const onResetFormClick = (evt) => {
   evt.preventDefault();
   document.querySelector(`.map__filters`).reset();
   document.querySelector(`.ad-form`).reset();
   window.disactivatePage();
 
+  type = document.querySelector(`#type`).value;
   document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
   document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
   document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
@@ -85,6 +80,7 @@ const onResetFormKeydown = (evt) => {
     document.querySelector(`.map__filters`).reset();
     document.querySelector(`.ad-form`).reset();
     window.disactivatePage();
+    type = document.querySelector(`#type`).value;
     document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
     document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
     document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
@@ -97,6 +93,7 @@ document.querySelector(`.ad-form`).addEventListener(`submit`, (evt) => {
   document.querySelector(`.map__filters`).reset();
   document.querySelector(`.ad-form`).reset();
   window.disactivatePage();
+  type = document.querySelector(`#type`).value;
   document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
   document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
   document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);

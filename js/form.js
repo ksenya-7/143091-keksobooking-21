@@ -13,7 +13,7 @@ const roomAmountForm = adForm.querySelector(`#room_number`);
 const timeinForm = adForm.querySelector(`#timein`);
 const timeoutForm = adForm.querySelector(`#timeout`);
 
-const fileAvaChooser = adForm.querySelector(`.ad-form-header__input`);
+const fileAvatarChooser = adForm.querySelector(`.ad-form-header__input`);
 const previewAva = adForm.querySelector(`.ad-form-header__preview img`);
 const photoContainer = adForm.querySelector(`.ad-form__photo-container`);
 const fileHouseChooser = adForm.querySelector(`.ad-form__input`);
@@ -32,12 +32,7 @@ const alertPriceValue = {
   'house': `«Дом» — минимальная цена 5 000`,
   'palace': `«Дворец» — минимальная цена 10 000`
 };
-const alertGuestValue = {
-  '1': `1 комната — «для 1 гостя»`,
-  '2': `2 комнаты — «для 2 гостей» или «для 1 гостя»`,
-  '3': `3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»`,
-  '100': `100 комнат — «не для гостей»`
-};
+
 const formGuestValue = {
   '1': [1],
   '2': [1, 2],
@@ -45,15 +40,22 @@ const formGuestValue = {
   '100': [0]
 };
 
+const alertGuestValue = {
+  '1': `1 комната — «для 1 гостя»`,
+  '2': `2 комнаты — «для 2 гостей» или «для 1 гостя»`,
+  '3': `3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»`,
+  '100': `100 комнат — «не для гостей»`
+};
+
 // загрузка внешнего файла
-let matchesAva = true;
-fileAvaChooser.addEventListener(`change`, () => {
-  const file = fileAvaChooser.files[0];
+let matchesAvatar = true;
+fileAvatarChooser.addEventListener(`change`, () => {
+  const file = fileAvatarChooser.files[0];
   const fileName = file.name.toLowerCase();
   previewAva.src = ``;
-  matchesAva = FILE_TYPES.some((it) => fileName.endsWith(it));
+  matchesAvatar = FILE_TYPES.some((it) => fileName.endsWith(it));
 
-  if (matchesAva) {
+  if (matchesAvatar) {
     const reader = new FileReader();
     reader.addEventListener(`load`, () => {
       previewAva.src = reader.result;
@@ -94,6 +96,12 @@ fileHouseChooser.addEventListener(`change`, () => {
   }
 });
 
+
+// annoy
+titleForm.value = `slkdhgaaghjkaglhadkhfgjakdfjhgadkjhfg`;
+// priceForm.value = `5000`;
+
+
 // prefill
 let capacityValue = capacityForm.value;
 let roomAmountValue = roomAmountForm.value;
@@ -102,32 +110,58 @@ let typeValue = typeForm.value;
 let priceValue = priceForm.value;
 let timeinValue = timeinForm.value;
 let timeoutValue = timeoutForm.value;
-// priceForm.placeholder = priceTypeValue[`${typeValue}`];
 
-capacityForm.addEventListener(`change`, () => {
-  capacityValue = capacityForm.value;
-  capacityForm.setCustomValidity(``);
-  capacityForm.style.outline = `none`;
-  capacityForm.reportValidity();
-  return capacityValue;
-});
-roomAmountForm.addEventListener(`change`, () => {
+let isValidOfAmountGuest = formGuestValue[`${roomAmountValue}`].includes(parseInt(capacityValue, 10)); // почему-то всегда false
+let isValidOfPriceType = priceValue >= priceTypeValue[`${typeValue}`]; // почему-то всегда true
+let isValidOfTime = timeinValue === timeoutValue;
+
+roomAmountForm.addEventListener(`change`, (evt) => {
   roomAmountValue = roomAmountForm.value;
-  capacityForm.setCustomValidity(``);
-  capacityForm.style.outline = `none`;
+  capacityValue = capacityForm.value;
+  // console.log(roomAmountValue);
+  // console.log(parseInt(capacityValue, 10));
+
+  evt.preventDefault();
+
+  if (!isValidOfAmountGuest) {
+    // console.log(isValidOfAmountGuest);
+    capacityForm.setCustomValidity(alertGuestValue[roomAmountValue]);
+    capacityForm.style.outline = `3px solid darkred`;
+  } else {
+    capacityValue = capacityForm.value;
+    capacityForm.setCustomValidity(``);
+    capacityForm.style.outline = `none`;
+  }
   roomAmountForm.reportValidity();
-  return roomAmountValue;
+});
+
+capacityForm.addEventListener(`change`, (evt) => {
+  evt.preventDefault();
+  roomAmountValue = roomAmountForm.value;
+  capacityValue = capacityForm.value;
+  // console.log(roomAmountValue);
+  // console.log(capacityValue);
+
+  if (!isValidOfAmountGuest) {
+    // console.log(isValidOfAmountGuest);
+    capacityForm.setCustomValidity(alertGuestValue[roomAmountValue]);
+    capacityForm.style.outline = `3px solid darkred`;
+  } else {
+    capacityForm.setCustomValidity(``);
+    capacityForm.style.outline = `none`;
+  }
+  capacityForm.reportValidity();
 });
 
 titleForm.addEventListener(`input`, (evt) => {
   titleValue = titleForm.value;
   if (titleValue.length < MIN_TITLE_LENGTH) {
     titleForm.setCustomValidity(`Минимальная длина заголовка объявления 30 символов. Допишите ещё ${MIN_TITLE_LENGTH - titleValue.length} симв.`);
-    titleForm.style.outline = `2px solid orange`;
+    titleForm.style.outline = `3px solid darkred`;
     evt.preventDefault();
   } else if (titleValue.length > MAX_TITLE_LENGTH) {
     titleForm.setCustomValidity(`Максимальная длина заголовка объявления 100 символов. Удалите лишние ${titleValue.length - MAX_TITLE_LENGTH} симв.`);
-    titleForm.style.outline = `2px solid orange`;
+    titleForm.style.outline = `3px solid darkred`;
     evt.preventDefault();
   } else {
     titleForm.setCustomValidity(``);
@@ -138,24 +172,42 @@ titleForm.addEventListener(`input`, (evt) => {
   titleForm.reportValidity();
 });
 
-typeForm.addEventListener(`change`, () => {
-  typeValue = typeForm.value;
-  priceForm.placeholder = priceTypeValue[`${typeValue}`];
-  priceForm.setCustomValidity(``);
-  priceForm.style.outline = `none`;
-  typeForm.reportValidity();
-  return typeValue;
-});
-priceForm.addEventListener(`change`, () => {
+typeForm.addEventListener(`change`, (evt) => {
+  evt.preventDefault();
   priceValue = priceForm.value;
-  priceForm.placeholder = priceTypeValue[`${typeValue}`];
-  priceForm.setCustomValidity(``);
-  priceForm.style.outline = `none`;
+  typeValue = typeForm.value;
+  // console.log(priceValue);
+  // console.log(typeValue);
+
+  if (!isValidOfPriceType) {
+    // console.log(isValidOfPriceType);
+    priceForm.setCustomValidity(alertPriceValue[typeValue]);
+    // console.log(alertPriceValue[typeValue]);
+    priceForm.style.outline = `3px solid darkred`;
+  } else {
+    priceForm.placeholder = priceTypeValue[`${typeValue}`];
+    priceForm.setCustomValidity(``);
+    priceForm.style.outline = `none`;
+  }
+  typeForm.reportValidity();
+});
+priceForm.addEventListener(`input`, (evt) => {
+  evt.preventDefault();
+  priceValue = priceForm.value;
+  typeValue = typeForm.value;
+
+  if (!isValidOfPriceType) {
+    // console.log(isValidOfPriceType);
+    priceForm.setCustomValidity(alertPriceValue[typeValue]);
+    priceForm.style.outline = `3px solid darkred`;
+  } else {
+    priceForm.placeholder = priceTypeValue[`${typeValue}`];
+    priceForm.setCustomValidity(``);
+    priceForm.style.outline = `none`;
+  }
   priceForm.reportValidity();
-  return priceValue;
 });
 
-let isValidOfTime = timeinValue === timeoutValue;
 timeinForm.addEventListener(`change`, () => {
   timeinValue = timeinForm.value;
   timeoutValue = timeoutForm.value;
@@ -181,19 +233,9 @@ timeoutForm.addEventListener(`change`, () => {
 
 // validation
 const onAdFormSubmit = () => {
-  const isValidOfAmountGuest = formGuestValue[`${roomAmountValue}`].some((element) => (parseInt(element, 10) === parseInt(capacityValue, 10)));
-  const isValidOfPriceType = priceValue >= priceTypeValue[`${typeValue}`];
-
-  if (!isValidOfAmountGuest) {
-    capacityForm.setCustomValidity(alertGuestValue[roomAmountValue]);
-    capacityForm.style.outline = `2px solid orange`;
-  } else if (!isValidOfPriceType) {
-    priceForm.setCustomValidity(alertPriceValue[typeValue]);
-    priceForm.placeholder = priceTypeValue[`${typeValue}`];
-    priceForm.style.outline = `2px solid orange`;
-  } else if (titleValue.length < MIN_TITLE_LENGTH || titleValue.length > MAX_TITLE_LENGTH) {
+  if (titleValue.length < MIN_TITLE_LENGTH || titleValue.length > MAX_TITLE_LENGTH) {
     titleForm.setCustomValidity(`Длина заголовка объявления от 30 до 100 символов.`);
-    titleForm.style.outline = `2px solid orange`;
+    titleForm.style.outline = `3px solid darkred`;
   } else {
     window.backend.save(new FormData(adForm), () => {
       window.disactivatePage();

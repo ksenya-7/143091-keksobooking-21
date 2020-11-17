@@ -6,7 +6,7 @@ const templateCard = document.querySelector(`#card`).content
 .querySelector(`.map__card`);
 const templatePhoto = templateCard.querySelector(`.popup__photo`);
 
-const typeAccomadations = {
+const typeAccommodation = {
   'flat': `Квартира`,
   'bungalow': `Бунгало`,
   'house': `Дом`,
@@ -43,7 +43,7 @@ const renderCard = (pin) => {
   card.querySelector(`.popup__title`).textContent = pin.offer.title;
   card.querySelector(`.popup__text--address`).textContent = pin.offer.address;
   card.querySelector(`.popup__text--price`).textContent = `${pin.offer.price}₽/ночь`;
-  card.querySelector(`.popup__type`).textContent = typeAccomadations[pin.offer.type];
+  card.querySelector(`.popup__type`).textContent = typeAccommodation[pin.offer.type];
   card.querySelector(`.popup__text--capacity`).textContent = `${pin.offer.rooms} комнаты для ${pin.offer.guests} гостей.`;
   card.querySelector(`.popup__text--time`).textContent = `Заезд после ${pin.offer.checkin}, выезд до ${pin.offer.checkout}.`;
   card.querySelector(`.popup__features`).innerHTML = ``;
