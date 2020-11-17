@@ -23,10 +23,14 @@ const renderPin = (pin) => {
   return pinElement;
 };
 
+const removePins = () => {
+  document.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach((element) => element.remove());
+  document.querySelectorAll(`.map__card`).forEach((element) => element.remove());
+};
+
 const renderPins = (elements) => {
   const renderedPins = elements.slice(0, AMOUNT_PINS);
-  document.querySelectorAll(`.map__pin:not(.map__pin--main)`).forEach((element) => (element.remove()));
-  document.querySelectorAll(`.popup`).forEach((element) => (element.remove()));
+  removePins();
   const fragment = document.createDocumentFragment();
 
   renderedPins.map(renderPin).forEach((element) => fragment.append(element));
@@ -37,4 +41,7 @@ const renderPins = (elements) => {
   window.openCards(elements, currentPins);
 };
 
-window.renderPins = renderPins;
+window.render = {
+  displayPins: renderPins,
+  removePins
+};

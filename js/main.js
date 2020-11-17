@@ -1,7 +1,5 @@
 'use strict';
 
-// const PIN_MAIN_WIDTH_FOR_ACTIVE = 65;
-// const PIN_MAIN_HEIGHT_FOR_ACTIVE = 87;
 const adFormFields = document.querySelector(`.ad-form`).children;
 const mapFiltersSelects = document.querySelectorAll(`select`);
 const mapFiltersFeatures = document.querySelectorAll(`input`);
@@ -15,7 +13,7 @@ const priceTypeValueDefault = {
 };
 
 const abledElements = (elements) => {
-  for (let element of elements) {
+  for (const element of elements) {
     if (element.tagName === `INPUT`) {
       element.removeAttribute(`disabled`, `disabled`);
     } else {
@@ -29,19 +27,20 @@ let loadPins = [];
 const onLoadSuccess = (elements) => {
   loadPins = elements.slice();
 
-  window.renderPins(loadPins);
+  window.render.displayPins(loadPins);
   window.filtersHandler(loadPins);
 };
 
 const activatePage = () => {
-  window.backend.load(onLoadSuccess, window.error.onLoadErrorMessage);
+  window.backend.load(onLoadSuccess, window.error.onLoadFailMessage);
 
   document.querySelector(`.ad-form`).classList.remove(`ad-form--disabled`);
   document.querySelector(`.map`).classList.remove(`map--faded`);
   abledElements(adFormFields);
   abledElements(mapFiltersSelects);
   abledElements(mapFiltersFeatures);
-  document.querySelector(`.map__pin--main`).querySelector(`img`).draggable = `true`;
+  window.move.addressForm.value = Math.round(window.open.FormAddressValue.LEFT) + `, ` + Math.round(window.open.FormAddressValue.TOP);
+  document.querySelector(`.map__pin--main img`).draggable = `true`;
   document.querySelector(`.map__pin--main`).removeEventListener(`click`, onMainPinClick);
   document.querySelector(`.map__pin--main`).removeEventListener(`keydown`, onMainPinKeydown);
 };
@@ -60,6 +59,7 @@ const onMainPinKeydown = (evt) => {
 
 let type = document.querySelector(`#type`).value;
 
+
 document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
 document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
 
@@ -67,7 +67,7 @@ const onResetFormClick = (evt) => {
   evt.preventDefault();
   document.querySelector(`.map__filters`).reset();
   document.querySelector(`.ad-form`).reset();
-  window.disactivatePage();
+  window.open.disactivatePage();
 
   type = document.querySelector(`#type`).value;
   document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
@@ -79,7 +79,7 @@ const onResetFormKeydown = (evt) => {
   if (window.utils.isEnter(evt)) {
     document.querySelector(`.map__filters`).reset();
     document.querySelector(`.ad-form`).reset();
-    window.disactivatePage();
+    window.open.disactivatePage();
     type = document.querySelector(`#type`).value;
     document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
     document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
@@ -89,10 +89,10 @@ const onResetFormKeydown = (evt) => {
 
 document.querySelector(`.ad-form`).addEventListener(`submit`, (evt) => {
   evt.preventDefault();
-  window.form.onAdFormSubmit();
+  window.form.onAdSubmit();
   document.querySelector(`.map__filters`).reset();
   document.querySelector(`.ad-form`).reset();
-  window.disactivatePage();
+  window.open.disactivatePage();
   type = document.querySelector(`#type`).value;
   document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
   document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);

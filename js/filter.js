@@ -1,5 +1,7 @@
 'use strict';
 
+const MIN_OF_MIDDLE_PRICE = 10000;
+const MAX_OF_MIDDLE_PRICE = 50000;
 const mapFilters = document.querySelector(`.map__filters`);
 const housingType = mapFilters.querySelector(`#housing-type`);
 const housingPrice = mapFilters.querySelector(`#housing-price`);
@@ -16,13 +18,13 @@ const filterByPrice = (element) => {
       result = true;
       break;
     case `middle`:
-      result = price >= 10000 && price <= 50000;
+      result = price >= MIN_OF_MIDDLE_PRICE && price <= MAX_OF_MIDDLE_PRICE;
       break;
     case `low`:
-      result = price < 10000;
+      result = price < MIN_OF_MIDDLE_PRICE;
       break;
     case `high`:
-      result = price > 50000;
+      result = price > MAX_OF_MIDDLE_PRICE;
       break;
   }
   return result;
@@ -37,7 +39,7 @@ const filterByFeatures = (element) => {
   return checkedFeatures.every((el) => features.includes(el));
 };
 
-const debouncedRenderSetOfPins = window.debounce(window.renderPins);
+const debouncedRenderSetOfPins = window.debounce(window.render.displayPins);
 
 const filtersHandler = (elements) => {
   mapFilters.addEventListener(`change`, () => {

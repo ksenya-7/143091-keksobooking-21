@@ -39,18 +39,22 @@ const renderPhotos = (elements, container) => {
 };
 
 const renderCard = (pin) => {
+  const {offer, author} = pin;
+  const {title, address, price, type, rooms, guests, checkin, checkout, description, features, photos} = offer;
+  const {avatar} = author;
+
   const card = templateCard.cloneNode(true);
-  card.querySelector(`.popup__title`).textContent = pin.offer.title;
-  card.querySelector(`.popup__text--address`).textContent = pin.offer.address;
-  card.querySelector(`.popup__text--price`).textContent = `${pin.offer.price}₽/ночь`;
-  card.querySelector(`.popup__type`).textContent = typeAccommodation[pin.offer.type];
-  card.querySelector(`.popup__text--capacity`).textContent = `${pin.offer.rooms} комнаты для ${pin.offer.guests} гостей.`;
-  card.querySelector(`.popup__text--time`).textContent = `Заезд после ${pin.offer.checkin}, выезд до ${pin.offer.checkout}.`;
+  card.querySelector(`.popup__title`).textContent = title;
+  card.querySelector(`.popup__text--address`).textContent = address;
+  card.querySelector(`.popup__text--price`).textContent = `${price}₽/ночь`;
+  card.querySelector(`.popup__type`).textContent = typeAccommodation[type];
+  card.querySelector(`.popup__text--capacity`).textContent = `${rooms} комнаты для ${guests} гостей.`;
+  card.querySelector(`.popup__text--time`).textContent = `Заезд после ${checkin}, выезд до ${checkout}.`;
   card.querySelector(`.popup__features`).innerHTML = ``;
-  renderFeatures(pin.offer.features, card.querySelector(`.popup__features`));
-  card.querySelector(`.popup__description`).textContent = pin.offer.description;
+  renderFeatures(features, card.querySelector(`.popup__features`));
+  card.querySelector(`.popup__description`).textContent = description;
   card.querySelector(`.popup__photos`).innerHTML = ``;
-  renderPhotos(pin.offer.photos, card.querySelector(`.popup__photos`));
+  renderPhotos(photos, card.querySelector(`.popup__photos`));
 
   CARD_CLASSES.forEach((element) => {
     if (card.querySelector(`.${element}`).innerHTML === ``) {
@@ -58,10 +62,10 @@ const renderCard = (pin) => {
     }
   });
 
-  card.querySelector(`.popup__avatar`).src = pin.author.avatar;
+  card.querySelector(`.popup__avatar`).src = avatar;
   card.querySelector(`.popup__avatar`).style.display = `block`;
 
-  filtersContainer.insertAdjacentElement(`beforeBegin`, card);
+  filtersContainer.insertAdjacentElement(`beforebegin`, card);
 };
 
 

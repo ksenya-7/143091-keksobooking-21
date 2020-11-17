@@ -69,6 +69,6 @@ const onLoadErrorMessage = (message) => {
 
 window.error = {
   onLoadSuccessMessage,
-  onLoadErrorMessage,
-  onLoadFormErrorMessage
+  onLoadFailMessage: onLoadErrorMessage,
+  onLoadFormFailMessage: onLoadFormErrorMessage
 };

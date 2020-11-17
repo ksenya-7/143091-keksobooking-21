@@ -2,6 +2,9 @@
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
+const PHOTO_WIDTH = `70`;
+const PHOTO_HEIGHT = `70`;
+const MAX_PRICE = 1000000;
 const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
 
 const adForm = document.querySelector(`.ad-form`);
@@ -14,68 +17,87 @@ const timeinForm = adForm.querySelector(`#timein`);
 const timeoutForm = adForm.querySelector(`#timeout`);
 
 const fileAvatarChooser = adForm.querySelector(`.ad-form-header__input`);
-const previewAva = adForm.querySelector(`.ad-form-header__preview img`);
+const previewAvatar = adForm.querySelector(`.ad-form-header__preview img`);
 const photoContainer = adForm.querySelector(`.ad-form__photo-container`);
 const fileHouseChooser = adForm.querySelector(`.ad-form__input`);
 const previewHouseBlockTemplate = adForm.querySelector(`.ad-form__photo`).cloneNode(true);
 adForm.querySelector(`.ad-form__photo`).style.display = `none`;
 
 const priceTypeValue = {
-  'bungalow': 0,
-  'flat': 1000,
-  'house': 5000,
-  'palace': 10000
-};
-const alertPriceValue = {
-  'bungalow': `«Бунгало» — минимальная цена за ночь 0`,
-  'flat': `«Квартира» — минимальная цена за ночь 1 000`,
-  'house': `«Дом» — минимальная цена 5 000`,
-  'palace': `«Дворец» — минимальная цена 10 000`
+  'bungalow': {
+    price: 0,
+    errorText: `«Бунгало» — минимальная цена за ночь 0`
+  },
+  'flat': {
+    price: 1000,
+    errorText: `«Квартира» — минимальная цена за ночь 1 000`
+  },
+  'house': {
+    price: 5000,
+    errorText: `«Дом» — минимальная цена 5 000`
+  },
+  'palace': {
+    price: 10000,
+    errorText: `«Дворец» — минимальная цена 10 000`
+  }
 };
 
-const formGuestValue = {
-  '1': [1],
-  '2': [1, 2],
-  '3': [1, 2, 3],
-  '100': [0]
-};
-
-const alertGuestValue = {
-  '1': `1 комната — «для 1 гостя»`,
-  '2': `2 комнаты — «для 2 гостей» или «для 1 гостя»`,
-  '3': `3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»`,
-  '100': `100 комнат — «не для гостей»`
+const capacityGuestValue = {
+  '1': {
+    guests: [`1`],
+    errorText: `1 комната — «для 1 гостя»`
+  },
+  '2': {
+    guests: [`1`, `2`],
+    errorText: `2 комнаты — «для 2 гостей» или «для 1 гостя»`
+  },
+  '3': {
+    guests: [`1`, `2`, `3`],
+    errorText: `3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»`
+  },
+  '100': {
+    guests: [`0`],
+    errorText: `100 комнат — «не для гостей»`
+  }
 };
 
 // загрузка внешнего файла
 let matchesAvatar = true;
-fileAvatarChooser.addEventListener(`change`, () => {
-  const file = fileAvatarChooser.files[0];
-  const fileName = file.name.toLowerCase();
-  previewAva.src = ``;
-  matchesAvatar = FILE_TYPES.some((it) => fileName.endsWith(it));
 
-  if (matchesAvatar) {
+const matchOrNot = (element, preview, file) => {
+  if (element) {
     const reader = new FileReader();
+
     reader.addEventListener(`load`, () => {
-      previewAva.src = reader.result;
+      preview.src = reader.result;
     });
-    reader.addEventListener(`error`, window.error.onLoadErrorMessage);
+    reader.addEventListener(`error`, window.error.onLoadFailMessage);
     reader.readAsDataURL(file);
   } else {
-    window.error.onLoadErrorMessage(`Ошибка загрузки файла`);
+    window.open.disactivatePage();
+    window.error.onLoadFailMessage(`Ошибка загрузки файла`);
   }
+};
+
+
+fileAvatarChooser.addEventListener(`change`, () => {
+  const fileAvatar = fileAvatarChooser.files[0];
+  const fileName = fileAvatar.name.toLowerCase();
+  previewAvatar.src = ``;
+  matchesAvatar = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  matchOrNot(matchesAvatar, previewAvatar, fileAvatar);
 });
 
 let matchesHouse = true;
 fileHouseChooser.addEventListener(`change`, () => {
-  const file = fileHouseChooser.files[0];
-  const fileName = file.name.toLowerCase();
+  const fileHouse = fileHouseChooser.files[0];
+  const fileName = fileHouse.name.toLowerCase();
 
   const previewHouse = document.createElement(`img`);
   previewHouse.alt = `Фото жилья`;
-  previewHouse.width = `70`;
-  previewHouse.height = `70`;
+  previewHouse.width = PHOTO_WIDTH;
+  previewHouse.height = PHOTO_HEIGHT;
   previewHouse.src = ``;
   const previewHouseBlock = previewHouseBlockTemplate.cloneNode(true);
   previewHouseBlock.append(previewHouse);
@@ -83,75 +105,56 @@ fileHouseChooser.addEventListener(`change`, () => {
 
   matchesHouse = FILE_TYPES.some((it) => fileName.endsWith(it));
 
-  if (matchesHouse) {
-    const reader = new FileReader();
-
-    reader.addEventListener(`load`, () => {
-      previewHouse.src = reader.result;
-    });
-    reader.addEventListener(`error`, window.error.onLoadErrorMessage);
-    reader.readAsDataURL(file);
-  } else {
-    window.error.onLoadErrorMessage(`Ошибка загрузки файла`);
-  }
+  matchOrNot(matchesHouse, previewHouse, fileHouse);
 });
 
+// валидация цены и типа
+const validateTypeAndPrice = () => {
+  const typeValue = typeForm.value;
+  const priceValue = parseInt(priceForm.value, 10);
+  const typeItem = priceTypeValue[typeValue];
+  priceForm.placeholder = typeItem.price;
 
-// annoy
-titleForm.value = `slkdhgaaghjkaglhadkhfgjakdfjhgadkjhfg`;
-// priceForm.value = `5000`;
+  priceForm.setCustomValidity(priceValue >= typeItem.price && priceValue < MAX_PRICE ? `` : typeItem.errorText);
+  priceForm.style.outline = priceValue >= typeItem.price && priceValue < MAX_PRICE ? `none` : `3px solid darkred`;
+};
 
+const onTypeChange = () => {
+  validateTypeAndPrice();
+  typeForm.reportValidity();
+};
+const onPriceChange = () => {
+  validateTypeAndPrice();
+  priceForm.reportValidity();
+};
 
-// prefill
-let capacityValue = capacityForm.value;
-let roomAmountValue = roomAmountForm.value;
-let titleValue = titleForm.value;
-let typeValue = typeForm.value;
-let priceValue = priceForm.value;
-let timeinValue = timeinForm.value;
-let timeoutValue = timeoutForm.value;
+typeForm.addEventListener(`change`, onTypeChange);
+priceForm.addEventListener(`input`, onPriceChange);
 
-let isValidOfAmountGuest = formGuestValue[`${roomAmountValue}`].includes(parseInt(capacityValue, 10)); // почему-то всегда false
-let isValidOfPriceType = priceValue >= priceTypeValue[`${typeValue}`]; // почему-то всегда true
-let isValidOfTime = timeinValue === timeoutValue;
+// валидация комнат и гостей
+const validateRoomsAndCapacity = () => {
+  const roomAmountValue = roomAmountForm.value;
+  const capacityValue = capacityForm.value;
+  const roomItem = capacityGuestValue[roomAmountValue];
 
-roomAmountForm.addEventListener(`change`, (evt) => {
-  roomAmountValue = roomAmountForm.value;
-  capacityValue = capacityForm.value;
-  // console.log(roomAmountValue);
-  // console.log(parseInt(capacityValue, 10));
+  capacityForm.setCustomValidity(roomItem.guests.includes(capacityValue) ? `` : roomItem.errorText);
+  capacityForm.style.outline = roomItem.guests.includes(capacityValue) ? `none` : `3px solid darkred`;
+};
 
-  evt.preventDefault();
-
-  if (!isValidOfAmountGuest) {
-    // console.log(isValidOfAmountGuest);
-    capacityForm.setCustomValidity(alertGuestValue[roomAmountValue]);
-    capacityForm.style.outline = `3px solid darkred`;
-  } else {
-    capacityValue = capacityForm.value;
-    capacityForm.setCustomValidity(``);
-    capacityForm.style.outline = `none`;
-  }
-  roomAmountForm.reportValidity();
-});
-
-capacityForm.addEventListener(`change`, (evt) => {
-  evt.preventDefault();
-  roomAmountValue = roomAmountForm.value;
-  capacityValue = capacityForm.value;
-  // console.log(roomAmountValue);
-  // console.log(capacityValue);
-
-  if (!isValidOfAmountGuest) {
-    // console.log(isValidOfAmountGuest);
-    capacityForm.setCustomValidity(alertGuestValue[roomAmountValue]);
-    capacityForm.style.outline = `3px solid darkred`;
-  } else {
-    capacityForm.setCustomValidity(``);
-    capacityForm.style.outline = `none`;
-  }
+const onCapacityChange = () => {
+  validateRoomsAndCapacity();
   capacityForm.reportValidity();
-});
+};
+const onRoomsChange = () => {
+  validateRoomsAndCapacity();
+  roomAmountForm.reportValidity();
+};
+
+capacityForm.addEventListener(`change`, onCapacityChange);
+roomAmountForm.addEventListener(`change`, onRoomsChange);
+
+// валидация заголовка
+let titleValue = titleForm.value;
 
 titleForm.addEventListener(`input`, (evt) => {
   titleValue = titleForm.value;
@@ -172,41 +175,10 @@ titleForm.addEventListener(`input`, (evt) => {
   titleForm.reportValidity();
 });
 
-typeForm.addEventListener(`change`, (evt) => {
-  evt.preventDefault();
-  priceValue = priceForm.value;
-  typeValue = typeForm.value;
-  // console.log(priceValue);
-  // console.log(typeValue);
-
-  if (!isValidOfPriceType) {
-    // console.log(isValidOfPriceType);
-    priceForm.setCustomValidity(alertPriceValue[typeValue]);
-    // console.log(alertPriceValue[typeValue]);
-    priceForm.style.outline = `3px solid darkred`;
-  } else {
-    priceForm.placeholder = priceTypeValue[`${typeValue}`];
-    priceForm.setCustomValidity(``);
-    priceForm.style.outline = `none`;
-  }
-  typeForm.reportValidity();
-});
-priceForm.addEventListener(`input`, (evt) => {
-  evt.preventDefault();
-  priceValue = priceForm.value;
-  typeValue = typeForm.value;
-
-  if (!isValidOfPriceType) {
-    // console.log(isValidOfPriceType);
-    priceForm.setCustomValidity(alertPriceValue[typeValue]);
-    priceForm.style.outline = `3px solid darkred`;
-  } else {
-    priceForm.placeholder = priceTypeValue[`${typeValue}`];
-    priceForm.setCustomValidity(``);
-    priceForm.style.outline = `none`;
-  }
-  priceForm.reportValidity();
-});
+// валидация времени
+let timeinValue = timeinForm.value;
+let timeoutValue = timeoutForm.value;
+let isValidOfTime = timeinValue === timeoutValue;
 
 timeinForm.addEventListener(`change`, () => {
   timeinValue = timeinForm.value;
@@ -231,22 +203,22 @@ timeoutForm.addEventListener(`change`, () => {
   }
 });
 
-// validation
+// валидация формы
 const onAdFormSubmit = () => {
   if (titleValue.length < MIN_TITLE_LENGTH || titleValue.length > MAX_TITLE_LENGTH) {
     titleForm.setCustomValidity(`Длина заголовка объявления от 30 до 100 символов.`);
     titleForm.style.outline = `3px solid darkred`;
   } else {
     window.backend.save(new FormData(adForm), () => {
-      window.disactivatePage();
+      window.open.disactivatePage();
       window.error.onLoadSuccessMessage();
-    }, window.error.onLoadFormErrorMessage);
+    }, window.error.onLoadFormFailMessage);
   }
 
   adForm.reportValidity();
 };
 
 window.form = {
-  onAdFormSubmit,
+  onAdSubmit: onAdFormSubmit,
   priceTypeValue
 };
