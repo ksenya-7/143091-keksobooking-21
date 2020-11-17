@@ -87,6 +87,19 @@ const onResetFormKeydown = (evt) => {
   }
 };
 
+
+window.form.fileAvatarChooser.addEventListener(`change`, () => {
+  window.form.matchOfAvatar();
+  document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
+  document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
+});
+
+window.form.fileHouseChooser.addEventListener(`change`, () => {
+  window.form.matchOfHouse();
+  document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
+  document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
+});
+
 document.querySelector(`.ad-form`).addEventListener(`submit`, (evt) => {
   evt.preventDefault();
   window.form.onAdSubmit();

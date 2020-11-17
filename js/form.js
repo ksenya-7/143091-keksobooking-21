@@ -62,9 +62,7 @@ const capacityGuestValue = {
 };
 
 // загрузка внешнего файла
-let matchesAvatar = true;
-
-const matchOrNot = (element, preview, file) => {
+const matchElement = (element, preview, file) => {
   if (element) {
     const reader = new FileReader();
 
@@ -79,18 +77,18 @@ const matchOrNot = (element, preview, file) => {
   }
 };
 
-
-fileAvatarChooser.addEventListener(`change`, () => {
+const matchOfAvatar = () => {
+  let matchesAvatar = true;
   const fileAvatar = fileAvatarChooser.files[0];
   const fileName = fileAvatar.name.toLowerCase();
   previewAvatar.src = ``;
   matchesAvatar = FILE_TYPES.some((it) => fileName.endsWith(it));
 
-  matchOrNot(matchesAvatar, previewAvatar, fileAvatar);
-});
+  matchElement(matchesAvatar, previewAvatar, fileAvatar);
+};
 
-let matchesHouse = true;
-fileHouseChooser.addEventListener(`change`, () => {
+const matchOfHouse = () => {
+  let matchesHouse = true;
   const fileHouse = fileHouseChooser.files[0];
   const fileName = fileHouse.name.toLowerCase();
 
@@ -105,8 +103,8 @@ fileHouseChooser.addEventListener(`change`, () => {
 
   matchesHouse = FILE_TYPES.some((it) => fileName.endsWith(it));
 
-  matchOrNot(matchesHouse, previewHouse, fileHouse);
-});
+  matchElement(matchesHouse, previewHouse, fileHouse);
+};
 
 // валидация цены и типа
 const validateTypeAndPrice = () => {
@@ -115,8 +113,8 @@ const validateTypeAndPrice = () => {
   const typeItem = priceTypeValue[typeValue];
   priceForm.placeholder = typeItem.price;
 
-  priceForm.setCustomValidity(priceValue >= typeItem.price && priceValue < MAX_PRICE ? `` : typeItem.errorText);
-  priceForm.style.outline = priceValue >= typeItem.price && priceValue < MAX_PRICE ? `none` : `3px solid darkred`;
+  priceForm.setCustomValidity(priceValue >= typeItem.price && priceValue <= MAX_PRICE ? `` : typeItem.errorText);
+  priceForm.style.outline = priceValue >= typeItem.price && priceValue <= MAX_PRICE ? `none` : `3px solid darkred`;
 };
 
 const onTypeChange = () => {
@@ -220,5 +218,9 @@ const onAdFormSubmit = () => {
 
 window.form = {
   onAdSubmit: onAdFormSubmit,
-  priceTypeValue
+  priceTypeValue,
+  fileAvatarChooser,
+  fileHouseChooser,
+  matchOfAvatar,
+  matchOfHouse
 };
