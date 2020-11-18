@@ -37,7 +37,7 @@ const onMouseDown = (evt) => {
     } else if (mapPinMain.offsetTop - shift.y < DRAG_TOP - PIN_MAIN_HEIGHT) {
       mapPinMain.style.top = `DRAG_TOP - PIN_MAIN_HEIGHT px`;
     } else {
-      mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + `px`;
+      mapPinMain.style.top = `${mapPinMain.offsetTop - shift.y}px`;
       addressForm.value = getAddress(mapPinMain.style.left, mapPinMain.style.top);
     }
 
@@ -46,7 +46,7 @@ const onMouseDown = (evt) => {
     } else if (mapPinMain.offsetLeft - shift.x < DRAG_LEFT - PIN_MAIN_WIDTH / 2) {
       mapPinMain.style.left = `DRAG_LEFT - PIN_MAIN_WIDTH / 2 px`;
     } else {
-      mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + `px`;
+      mapPinMain.style.left = `${mapPinMain.offsetLeft - shift.x}px`;
       addressForm.value = getAddress(mapPinMain.style.left, mapPinMain.style.top);
     }
   };

@@ -70,5 +70,6 @@ const onLoadErrorMessage = (message) => {
 window.error = {
   onLoadSuccessMessage,
   onLoadFailMessage: onLoadErrorMessage,
-  onLoadFormFailMessage: onLoadFormErrorMessage
+  onLoadFormFailMessage: onLoadFormErrorMessage,
+  failButton: errorButton
 };

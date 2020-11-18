@@ -29,6 +29,9 @@ const onLoadSuccess = (elements) => {
 
   window.render.displayPins(loadPins);
   window.filtersHandler(loadPins);
+
+  window.move.mapPinMain.removeEventListener(`click`, onMainPinClick);
+  window.move.mapPinMain.removeEventListener(`keydown`, onMainPinKeydown);
 };
 
 const activatePage = () => {
@@ -41,8 +44,6 @@ const activatePage = () => {
   abledElements(mapFiltersFeatures);
   window.move.addressForm.value = Math.round(window.open.FormAddressValue.LEFT) + `, ` + Math.round(window.open.FormAddressValue.TOP);
   document.querySelector(`.map__pin--main img`).draggable = `true`;
-  document.querySelector(`.map__pin--main`).removeEventListener(`click`, onMainPinClick);
-  document.querySelector(`.map__pin--main`).removeEventListener(`keydown`, onMainPinKeydown);
 };
 
 const onMainPinClick = (evt) => {
@@ -59,9 +60,8 @@ const onMainPinKeydown = (evt) => {
 
 let type = document.querySelector(`#type`).value;
 
-
-document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
-document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
+window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
+window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
 
 const onResetFormClick = (evt) => {
   evt.preventDefault();
@@ -71,8 +71,8 @@ const onResetFormClick = (evt) => {
 
   type = document.querySelector(`#type`).value;
   document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
-  document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
-  document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
+  window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
+  window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
 };
 const onResetFormKeydown = (evt) => {
   evt.preventDefault();
@@ -82,22 +82,21 @@ const onResetFormKeydown = (evt) => {
     window.open.disactivatePage();
     type = document.querySelector(`#type`).value;
     document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
-    document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
-    document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
+    window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
+    window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
   }
 };
 
-
 window.form.fileAvatarChooser.addEventListener(`change`, () => {
   window.form.matchOfAvatar();
-  document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
-  document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
+  window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
+  window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
 });
 
 window.form.fileHouseChooser.addEventListener(`change`, () => {
   window.form.matchOfHouse();
-  document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
-  document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
+  window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
+  window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
 });
 
 document.querySelector(`.ad-form`).addEventListener(`submit`, (evt) => {
@@ -108,9 +107,15 @@ document.querySelector(`.ad-form`).addEventListener(`submit`, (evt) => {
   window.open.disactivatePage();
   type = document.querySelector(`#type`).value;
   document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
-  document.querySelector(`.map__pin--main`).addEventListener(`click`, onMainPinClick);
-  document.querySelector(`.map__pin--main`).addEventListener(`keydown`, onMainPinKeydown);
+  window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
+  window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
 });
 
 resetForm.addEventListener(`click`, onResetFormClick);
 resetForm.addEventListener(`keydown`, onResetFormKeydown);
+
+// window.error.failButton.addEventListener(`mousedown`, () => {
+//   window.open.disactivatePage();
+//   window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
+//   window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
+// });

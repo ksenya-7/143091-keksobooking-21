@@ -9,6 +9,8 @@ const Url = {
 };
 
 const StatusCode = {
+  0: `Ошибка сети`,
+  102: `Пользователь отменил запрос`,
   400: `Неверный запрос`,
   401: `Пользователь не авторизован`,
   404: `Ничего не найдено`,
@@ -24,7 +26,7 @@ const onXhrLoad = (xhr, onLoad, onError) => {
     case (xhr.status) : error = StatusCode[xhr.status];
       break;
     default:
-      error = `Cтатус ответа: : ` + xhr.status + ` ` + xhr.statusText;
+      error = `Cтатус ответа: ${xhr.status} ${xhr.statusText}`;
   }
 
   if (error) {
@@ -41,11 +43,11 @@ const loadOrSaveXhr = (method, onLoad, onError, url, data) => {
   xhr.timeout = TIMEOUT;
 
   xhr.addEventListener(`timeout`, () => {
-    onError(`Запрос не успел выполниться за ` + xhr.timeout + `мс`);
+    onError(`Запрос не успел выполниться за ${xhr.timeout} мс`);
   });
 
   xhr.addEventListener(`error`, () => {
-    window.error.onLoadFailMessage();
+    window.error.onLoadFailMessage(`${StatusCode[xhr.status]}`);
   });
 
   xhr.open(method, url);
