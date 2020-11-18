@@ -2,13 +2,14 @@
 
 const PIN_MAIN_LEFT = `570px`;
 const PIN_MAIN_TOP = `375px`;
-const mapDefaultFilters = document.querySelector(`.map__filters`);
-const mapDefaultFiltersSelects = mapDefaultFilters.querySelectorAll(`.map__filter`);
-const mapDefaultFeatures = mapDefaultFilters.querySelector(`.map__features`);
-const mapDefaultFiltersFeatures = mapDefaultFilters.querySelectorAll(`.map__checkbox`);
+const mapFiltersSelects = window.filter.mapStrainers.querySelectorAll(`.map__filter`);
+const mapFeatures = window.filter.mapStrainers.querySelector(`.map__features`);
+const mapFiltersFeatures = window.filter.mapStrainers.querySelectorAll(`.map__checkbox`);
+const selectType = document.querySelector(`#type`);
+const inputPrice = document.querySelector(`#price`);
 
-mapDefaultFilters.style.opacity = `1`;
-mapDefaultFeatures.style.opacity = `0.7`;
+window.filter.mapStrainers.style.opacity = `1`;
+mapFeatures.style.opacity = `0.7`;
 
 const FormAddressValue = {
   LEFT: parseInt(document.querySelector(`.map__pin--main`).style.left, 10) + window.move.PIN_MAIN_WIDTH / 2,
@@ -16,7 +17,7 @@ const FormAddressValue = {
   TOP: parseInt(document.querySelector(`.map__pin--main`).style.top, 10) + window.move.PIN_MAIN_HEIGHT
 };
 
-const priceTypeValueDefaultOpen = {
+const priceTypeValueDefault = {
   'bungalow': 0,
   'flat': 1000,
   'house': 5000,
@@ -35,17 +36,17 @@ const disabledElements = (elements) => {
     item.style.outline = `none`;
   });
 
-  mapDefaultFeatures.style.opacity = `0.7`;
+  mapFeatures.style.opacity = `0.7`;
 };
 
 const openPage = () => {
   disabledElements(document.querySelector(`.ad-form`).children);
-  disabledElements(mapDefaultFiltersSelects);
-  disabledElements(mapDefaultFiltersFeatures);
+  disabledElements(mapFiltersSelects);
+  disabledElements(mapFiltersFeatures);
   document.querySelector(`#address`).value = Math.round(FormAddressValue.LEFT) + `, ` + Math.round(FormAddressValue.TOP_INITIAL);
   document.querySelector(`#address`).setAttribute(`readonly`, `readonly`);
-  const type = document.querySelector(`#type`).value;
-  document.querySelector(`#price`).placeholder = priceTypeValueDefaultOpen[type];
+  const type = selectType.value;
+  inputPrice.placeholder = priceTypeValueDefault[type];
 };
 openPage();
 
@@ -68,5 +69,8 @@ const disactivatePage = () => {
 
 window.open = {
   disactivatePage,
-  FormAddressValue
+  FormAddressValue,
+  priceTypeValueDefault,
+  selectType,
+  inputPrice
 };

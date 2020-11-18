@@ -1,16 +1,9 @@
 'use strict';
 
 const adFormFields = document.querySelector(`.ad-form`).children;
-const mapFiltersSelects = document.querySelectorAll(`select`);
-const mapFiltersFeatures = document.querySelectorAll(`input`);
+const mapFiltersSelectsForActive = document.querySelectorAll(`select`);
+const mapFiltersFeaturesForActive = document.querySelectorAll(`input`);
 const resetForm = document.querySelector(`.ad-form__reset`);
-
-const priceTypeValueDefault = {
-  'bungalow': 0,
-  'flat': 1000,
-  'house': 5000,
-  'palace': 10000
-};
 
 const abledElements = (elements) => {
   for (const element of elements) {
@@ -28,7 +21,7 @@ const onLoadSuccess = (elements) => {
   loadPins = elements.slice();
 
   window.render.displayPins(loadPins);
-  window.filtersHandler(loadPins);
+  window.filter.strainerForPins(loadPins);
 
   window.move.mapPinMain.removeEventListener(`click`, onMainPinClick);
   window.move.mapPinMain.removeEventListener(`keydown`, onMainPinKeydown);
@@ -40,8 +33,8 @@ const activatePage = () => {
   document.querySelector(`.ad-form`).classList.remove(`ad-form--disabled`);
   document.querySelector(`.map`).classList.remove(`map--faded`);
   abledElements(adFormFields);
-  abledElements(mapFiltersSelects);
-  abledElements(mapFiltersFeatures);
+  abledElements(mapFiltersSelectsForActive);
+  abledElements(mapFiltersFeaturesForActive);
   window.move.addressForm.value = Math.round(window.open.FormAddressValue.LEFT) + `, ` + Math.round(window.open.FormAddressValue.TOP);
   document.querySelector(`.map__pin--main img`).draggable = `true`;
 };
@@ -58,32 +51,30 @@ const onMainPinKeydown = (evt) => {
   }
 };
 
-let type = document.querySelector(`#type`).value;
-
 window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
 window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
 
-const onResetFormClick = (evt) => {
-  evt.preventDefault();
+let type = window.open.selectType.value;
+
+const cleanForm = () => {
   document.querySelector(`.map__filters`).reset();
   document.querySelector(`.ad-form`).reset();
   window.open.disactivatePage();
 
-  type = document.querySelector(`#type`).value;
-  document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
+  type = window.open.selectType.value;
+  window.open.inputPrice.placeholder = window.open.priceTypeValueDefault[type];
   window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
   window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
+};
+
+const onResetFormClick = (evt) => {
+  evt.preventDefault();
+  cleanForm();
 };
 const onResetFormKeydown = (evt) => {
   evt.preventDefault();
   if (window.utils.isEnter(evt)) {
-    document.querySelector(`.map__filters`).reset();
-    document.querySelector(`.ad-form`).reset();
-    window.open.disactivatePage();
-    type = document.querySelector(`#type`).value;
-    document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
-    window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
-    window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
+    cleanForm();
   }
 };
 
@@ -102,20 +93,8 @@ window.form.fileHouseChooser.addEventListener(`change`, () => {
 document.querySelector(`.ad-form`).addEventListener(`submit`, (evt) => {
   evt.preventDefault();
   window.form.onAdSubmit();
-  document.querySelector(`.map__filters`).reset();
-  document.querySelector(`.ad-form`).reset();
-  window.open.disactivatePage();
-  type = document.querySelector(`#type`).value;
-  document.querySelector(`#price`).placeholder = priceTypeValueDefault[type];
-  window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
-  window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
+  cleanForm();
 });
 
 resetForm.addEventListener(`click`, onResetFormClick);
 resetForm.addEventListener(`keydown`, onResetFormKeydown);
-
-// window.error.failButton.addEventListener(`mousedown`, () => {
-//   window.open.disactivatePage();
-//   window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
-//   window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
-// });

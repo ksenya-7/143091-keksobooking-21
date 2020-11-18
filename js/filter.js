@@ -41,11 +41,14 @@ const filterByFeatures = (element) => {
 
 const debouncedRenderSetOfPins = window.debounce(window.render.displayPins);
 
-const filtersHandler = (elements) => {
+const filterPins = (elements) => {
   mapFilters.addEventListener(`change`, () => {
     const filteredPins = elements.filter(filterByType).filter(filterByPrice).filter(filterByRooms).filter(filterByGuests).filter(filterByFeatures);
     debouncedRenderSetOfPins(filteredPins);
   });
 };
 
-window.filtersHandler = filtersHandler;
+window.filter = {
+  strainerForPins: filterPins,
+  mapStrainers: mapFilters
+};
