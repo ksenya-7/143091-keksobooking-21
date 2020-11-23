@@ -28,7 +28,7 @@ const onLoadSuccess = (elements) => {
 };
 
 const activatePage = () => {
-  window.backend.load(onLoadSuccess, window.error.onLoadFailMessage);
+  window.backend.load(onLoadSuccess, window.errorSuccess.onLoadFailMessage);
 
   document.querySelector(`.ad-form`).classList.remove(`ad-form--disabled`);
   document.querySelector(`.map`).classList.remove(`map--faded`);
@@ -90,7 +90,7 @@ resetForm.addEventListener(`keydown`, onResetFormKeydown);
 
 const onSaveSuccess = () => {
   window.open.disactivatePage();
-  window.error.onLoadSuccessMessage();
+  window.errorSuccess.onLoadLuckyMessage();
   cleanForm();
   window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
   window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
@@ -98,6 +98,6 @@ const onSaveSuccess = () => {
 
 document.querySelector(`.ad-form`).addEventListener(`submit`, (evt) => {
   evt.preventDefault();
-  window.backend.save(new FormData(document.querySelector(`.ad-form`)), onSaveSuccess, window.error.onLoadFormFailMessage);
-  // window.backend.save(window.form.newData, onSaveSuccess, window.error.onLoadFormFailMessage);
+  window.backend.save(new FormData(document.querySelector(`.ad-form`)), onSaveSuccess, window.errorSuccess.onLoadFormFailMessage);
+  // window.backend.save(window.form.newData, onSaveSuccess, window.errorSuccess.onLoadFormFailMessage);
 });

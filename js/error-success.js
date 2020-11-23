@@ -67,8 +67,8 @@ const onLoadErrorMessage = (message) => {
   document.addEventListener(`mousedown`, onErrorMessageClick);
 };
 
-window.error = {
-  onLoadSuccessMessage,
+window.errorSuccess = {
+  onLoadLuckyMessage: onLoadSuccessMessage,
   onLoadFailMessage: onLoadErrorMessage,
   onLoadFormFailMessage: onLoadFormErrorMessage,
   failButton: errorButton

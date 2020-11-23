@@ -68,7 +68,7 @@ const matchElement = (preview, file) => {
   reader.addEventListener(`load`, () => {
     preview.src = reader.result;
   });
-  reader.addEventListener(`error`, window.error.onLoadFailMessage);
+  reader.addEventListener(`error`, window.errorSuccess.onLoadFailMessage);
   reader.readAsDataURL(file);
 };
 
@@ -82,7 +82,7 @@ const matchOfAvatar = () => {
     previewAvatar.src = ``;
     matchElement(previewAvatar, fileAvatar);
   } else {
-    window.error.onLoadFailMessage(`Ошибка загрузки файла`);
+    window.errorSuccess.onLoadFailMessage(`Ошибка загрузки файла`);
     previewAvatar.src = `img/muffin-grey.svg`;
   }
 };
@@ -103,7 +103,7 @@ const matchOfHouse = () => {
     photoContainer.append(previewHouseBlock);
     matchElement(previewHouse, fileHouse);
   } else {
-    window.error.onLoadFailMessage(`Ошибка загрузки файла`);
+    window.errorSuccess.onLoadFailMessage(`Ошибка загрузки файла`);
   }
 };
 
@@ -182,7 +182,7 @@ let timeinValue = timeinForm.value;
 let timeoutValue = timeoutForm.value;
 let isValidOfTime = timeinValue === timeoutValue;
 
-timeinForm.addEventListener(`change`, () => {
+const onTimeinFormChange = () => {
   timeinValue = timeinForm.value;
   timeoutValue = timeoutForm.value;
   isValidOfTime = timeinValue === timeoutValue;
@@ -192,8 +192,8 @@ timeinForm.addEventListener(`change`, () => {
     timeoutForm.setCustomValidity(``);
     timeoutForm.style.outline = `none`;
   }
-});
-timeoutForm.addEventListener(`change`, () => {
+};
+const onTimeoutFormChange = () => {
   timeinValue = timeinForm.value;
   timeoutValue = timeoutForm.value;
   isValidOfTime = timeinValue === timeoutValue;
@@ -203,7 +203,10 @@ timeoutForm.addEventListener(`change`, () => {
     timeoutForm.setCustomValidity(``);
     timeoutForm.style.outline = `none`;
   }
-});
+};
+
+timeinForm.addEventListener(`change`, onTimeinFormChange);
+timeoutForm.addEventListener(`change`, onTimeoutFormChange);
 
 // const newData = new FormData(adForm);
 

@@ -47,7 +47,7 @@ const onXhrLoad = (xhr, onLoad, onError) => {
 //   });
 
 //   xhr.addEventListener(`error`, () => {
-//     window.error.onLoadFailMessage(`${StatusCode[xhr.status]}`);
+//     window.errorSuccess.onLoadFailMessage(`${StatusCode[xhr.status]}`);
 //     window.open.disactivatePage();
 //   });
 
@@ -72,7 +72,7 @@ const load = (onLoad, onError) => {
   loadOrSaveXhr(xhr, onLoad, onError);
 
   xhr.addEventListener(`error`, () => {
-    window.error.onLoadFailMessage(`${StatusCode[xhr.status]}`);
+    window.errorSuccess.onLoadFailMessage(`${StatusCode[xhr.status]}`);
     window.open.disactivatePage();
   });
 
@@ -88,7 +88,7 @@ const save = (data, onLoad, onError) => {
 
   xhr.addEventListener(`error`, (evt) => {
     evt.preventDefault();
-    window.error.onLoadFailMessage(`Ошибка сети, данные не отправились`);
+    window.errorSuccess.onLoadFailMessage(`Ошибка сети, данные не отправились`);
   });
 
   xhr.open(`POST`, Url.URL);
@@ -96,7 +96,6 @@ const save = (data, onLoad, onError) => {
 
   // loadOrSaveXhr(`POST`, onLoad, onError, Url.URL, data);
 };
-// window.backend.save(new FormData(adForm), window.error.onLoadSuccessMessage, window.error.onLoadFormFailMessage);
 
 window.backend = {
   load,
