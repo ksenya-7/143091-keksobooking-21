@@ -53,7 +53,7 @@ openPage();
 const disactivatePage = () => {
   document.querySelector(`.ad-form`).classList.add(`ad-form--disabled`);
   document.querySelector(`.map`).classList.add(`map--faded`);
-  window.render.removePins();
+  window.render.undisplayPins();
   openPage();
 
   document.querySelector(`.map__pin--main`).style.left = PIN_MAIN_LEFT;

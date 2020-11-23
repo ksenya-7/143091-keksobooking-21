@@ -43,5 +43,5 @@ const renderPins = (elements) => {
 
 window.render = {
   displayPins: renderPins,
-  removePins
+  undisplayPins: removePins
 };
