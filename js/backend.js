@@ -9,7 +9,7 @@ const Url = {
 };
 
 const StatusCode = {
-  0: `Ошибка сети`,
+  0: `Ошибка сети, данные не загрузились`,
   102: `Пользователь отменил запрос`,
   400: `Неверный запрос`,
   401: `Пользователь не авторизован`,
@@ -34,33 +34,69 @@ const onXhrLoad = (xhr, onLoad, onError) => {
   }
 };
 
-const loadOrSaveXhr = (method, onLoad, onError, url, data) => {
-  const xhr = new XMLHttpRequest();
-  xhr.responseType = `json`;
+// const loadOrSaveXhr = (method, onLoad, onError, url, data) => {
+//   const xhr = new XMLHttpRequest();
+//   xhr.responseType = `json`;
 
-  xhr.addEventListener(`load`, onXhrLoad.bind(null, xhr, onLoad, onError));
+//   xhr.addEventListener(`load`, onXhrLoad.bind(null, xhr, onLoad, onError));
 
-  xhr.timeout = TIMEOUT;
+//   xhr.timeout = TIMEOUT;
 
-  xhr.addEventListener(`timeout`, () => {
-    onError(`Запрос не успел выполниться за ${xhr.timeout} мс`);
+//   xhr.addEventListener(`timeout`, () => {
+//     onError(`Запрос не успел выполниться за ${xhr.timeout} мс`);
+//   });
+
+//   xhr.addEventListener(`error`, () => {
+//     window.error.onLoadFailMessage(`${StatusCode[xhr.status]}`);
+//     window.open.disactivatePage();
+//   });
+
+//   xhr.open(method, url);
+//   xhr.send(data);
+// };
+
+const loadOrSaveXhr = (request, onLoad, onError) => {
+  request.responseType = `json`;
+
+  request.addEventListener(`load`, onXhrLoad.bind(null, request, onLoad, onError));
+
+  request.timeout = TIMEOUT;
+
+  request.addEventListener(`timeout`, () => {
+    onError(`Запрос не успел выполниться за ${request.timeout} мс`);
   });
-
-  xhr.addEventListener(`error`, () => {
-    window.error.onLoadFailMessage(`${StatusCode[xhr.status]}`);
-  });
-
-  xhr.open(method, url);
-  xhr.send(data);
 };
 
 const load = (onLoad, onError) => {
-  loadOrSaveXhr(`GET`, onLoad, onError, Url.URL_DATA);
+  const xhr = new XMLHttpRequest();
+  loadOrSaveXhr(xhr, onLoad, onError);
+
+  xhr.addEventListener(`error`, () => {
+    window.error.onLoadFailMessage(`${StatusCode[xhr.status]}`);
+    window.open.disactivatePage();
+  });
+
+  xhr.open(`GET`, Url.URL_DATA);
+  xhr.send();
+
+  // loadOrSaveXhr(`GET`, onLoad, onError, Url.URL_DATA);
 };
 
 const save = (data, onLoad, onError) => {
-  loadOrSaveXhr(`POST`, onLoad, onError, Url.URL, data);
+  const xhr = new XMLHttpRequest();
+  loadOrSaveXhr(xhr, onLoad, onError);
+
+  xhr.addEventListener(`error`, (evt) => {
+    evt.preventDefault();
+    window.error.onLoadFailMessage(`Ошибка сети, данные не отправились`);
+  });
+
+  xhr.open(`POST`, Url.URL);
+  xhr.send(data);
+
+  // loadOrSaveXhr(`POST`, onLoad, onError, Url.URL, data);
 };
+// window.backend.save(new FormData(adForm), window.error.onLoadSuccessMessage, window.error.onLoadFormFailMessage);
 
 window.backend = {
   load,

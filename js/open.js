@@ -43,7 +43,7 @@ const openPage = () => {
   disabledElements(document.querySelector(`.ad-form`).children);
   disabledElements(mapFiltersSelects);
   disabledElements(mapFiltersFeatures);
-  document.querySelector(`#address`).value = Math.round(FormAddressValue.LEFT) + `, ` + Math.round(FormAddressValue.TOP_INITIAL);
+  document.querySelector(`#address`).value = `${Math.round(FormAddressValue.LEFT)}, ${Math.round(FormAddressValue.TOP_INITIAL)}`;
   document.querySelector(`#address`).setAttribute(`readonly`, `readonly`);
   const type = selectType.value;
   inputPrice.placeholder = priceTypeValueDefault[type];
@@ -58,7 +58,7 @@ const disactivatePage = () => {
 
   document.querySelector(`.map__pin--main`).style.left = PIN_MAIN_LEFT;
   document.querySelector(`.map__pin--main`).style.top = PIN_MAIN_TOP;
-  document.querySelector(`.ad-form-header__preview img`).src = `img/muffin-grey.svg`;
+
   document.querySelectorAll(`.ad-form__photo`).forEach((element) => {
     if (element.hasChildNodes()) {
       element.remove();

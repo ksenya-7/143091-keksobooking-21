@@ -62,49 +62,53 @@ const capacityGuestValue = {
 };
 
 // загрузка внешнего файла
-const matchElement = (element, preview, file) => {
-  if (element) {
-    const reader = new FileReader();
+const matchElement = (preview, file) => {
+  const reader = new FileReader();
 
-    reader.addEventListener(`load`, () => {
-      preview.src = reader.result;
-    });
-    reader.addEventListener(`error`, window.error.onLoadFailMessage);
-    reader.readAsDataURL(file);
-  } else {
-    window.open.disactivatePage();
-    window.error.onLoadFailMessage(`Ошибка загрузки файла`);
-  }
+  reader.addEventListener(`load`, () => {
+    preview.src = reader.result;
+  });
+  reader.addEventListener(`error`, window.error.onLoadFailMessage);
+  reader.readAsDataURL(file);
 };
 
 const matchOfAvatar = () => {
   let matchesAvatar = true;
   const fileAvatar = fileAvatarChooser.files[0];
   const fileName = fileAvatar.name.toLowerCase();
-  previewAvatar.src = ``;
+
   matchesAvatar = FILE_TYPES.some((it) => fileName.endsWith(it));
-
-  matchElement(matchesAvatar, previewAvatar, fileAvatar);
+  if (matchesAvatar) {
+    previewAvatar.src = ``;
+    matchElement(previewAvatar, fileAvatar);
+  } else {
+    window.error.onLoadFailMessage(`Ошибка загрузки файла`);
+    previewAvatar.src = `img/muffin-grey.svg`;
+  }
 };
-
 const matchOfHouse = () => {
   let matchesHouse = true;
   const fileHouse = fileHouseChooser.files[0];
   const fileName = fileHouse.name.toLowerCase();
 
-  const previewHouse = document.createElement(`img`);
-  previewHouse.alt = `Фото жилья`;
-  previewHouse.width = PHOTO_WIDTH;
-  previewHouse.height = PHOTO_HEIGHT;
-  previewHouse.src = ``;
-  const previewHouseBlock = previewHouseBlockTemplate.cloneNode(true);
-  previewHouseBlock.append(previewHouse);
-  photoContainer.append(previewHouseBlock);
-
   matchesHouse = FILE_TYPES.some((it) => fileName.endsWith(it));
-
-  matchElement(matchesHouse, previewHouse, fileHouse);
+  if (matchesHouse) {
+    const previewHouse = document.createElement(`img`);
+    previewHouse.alt = `Фото жилья`;
+    previewHouse.width = PHOTO_WIDTH;
+    previewHouse.height = PHOTO_HEIGHT;
+    previewHouse.src = ``;
+    const previewHouseBlock = previewHouseBlockTemplate.cloneNode(true);
+    previewHouseBlock.append(previewHouse);
+    photoContainer.append(previewHouseBlock);
+    matchElement(previewHouse, fileHouse);
+  } else {
+    window.error.onLoadFailMessage(`Ошибка загрузки файла`);
+  }
 };
+
+fileAvatarChooser.addEventListener(`change`, matchOfAvatar);
+fileHouseChooser.addEventListener(`change`, matchOfHouse);
 
 // валидация цены и типа
 const validateTypeAndPrice = () => {
@@ -201,23 +205,10 @@ timeoutForm.addEventListener(`change`, () => {
   }
 });
 
-// валидация формы
-const onAdFormSubmit = () => {
-  if (titleValue.length < MIN_TITLE_LENGTH || titleValue.length > MAX_TITLE_LENGTH) {
-    titleForm.setCustomValidity(`Длина заголовка объявления от 30 до 100 символов.`);
-    titleForm.style.outline = `3px solid darkred`;
-  } else {
-    window.backend.save(new FormData(adForm), () => {
-      window.open.disactivatePage();
-      window.error.onLoadSuccessMessage();
-    }, window.error.onLoadFormFailMessage);
-  }
-
-  adForm.reportValidity();
-};
+// const newData = new FormData(adForm);
 
 window.form = {
-  onAdSubmit: onAdFormSubmit,
+  // newData,
   priceTypeValue,
   fileAvatarChooser,
   fileHouseChooser,

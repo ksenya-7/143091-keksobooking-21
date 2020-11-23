@@ -17,7 +17,7 @@ const onMouseDown = (evt) => {
     x: evt.clientX,
     y: evt.clientY,
   };
-  const getAddress = (left, right) => Math.floor(parseInt(left, 10) + PIN_MAIN_WIDTH / 2) + `, ` + Math.floor(parseInt(right, 10) + PIN_MAIN_HEIGHT);
+  const getAddress = (left, right) => `${Math.floor(parseInt(left, 10) + PIN_MAIN_WIDTH / 2)}, ${Math.floor(parseInt(right, 10) + PIN_MAIN_HEIGHT)}`;
 
   const onMouseMove = (moveEvt) => {
     moveEvt.preventDefault();

@@ -35,8 +35,8 @@ const activatePage = () => {
   abledElements(adFormFields);
   abledElements(mapFiltersSelectsForActive);
   abledElements(mapFiltersFeaturesForActive);
-  window.move.addressForm.value = Math.round(window.open.FormAddressValue.LEFT) + `, ` + Math.round(window.open.FormAddressValue.TOP);
-  document.querySelector(`.map__pin--main img`).draggable = `true`;
+  window.move.addressForm.value = `${Math.round(window.open.FormAddressValue.LEFT)}, ${Math.round(window.open.FormAddressValue.TOP)}`;
+  window.move.mapPinMain.querySelector(`img`).draggable = `true`;
 };
 
 const onMainPinClick = (evt) => {
@@ -59,10 +59,11 @@ let type = window.open.selectType.value;
 const cleanForm = () => {
   document.querySelector(`.map__filters`).reset();
   document.querySelector(`.ad-form`).reset();
-  window.open.disactivatePage();
+  window.move.addressForm.value = Math.round(window.open.FormAddressValue.LEFT) + `, ` + Math.round(window.open.FormAddressValue.TOP_INITIAL);
 
   type = window.open.selectType.value;
   window.open.inputPrice.placeholder = window.open.priceTypeValueDefault[type];
+  document.querySelector(`.ad-form-header__preview img`).src = `img/muffin-grey.svg`;
   window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
   window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
 };
@@ -70,31 +71,33 @@ const cleanForm = () => {
 const onResetFormClick = (evt) => {
   evt.preventDefault();
   cleanForm();
+  window.open.disactivatePage();
+  window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
+  window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
 };
 const onResetFormKeydown = (evt) => {
   evt.preventDefault();
   if (window.utils.isEnter(evt)) {
     cleanForm();
+    window.open.disactivatePage();
+    window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
+    window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
   }
 };
 
-window.form.fileAvatarChooser.addEventListener(`change`, () => {
-  window.form.matchOfAvatar();
-  window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
-  window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
-});
+resetForm.addEventListener(`click`, onResetFormClick);
+resetForm.addEventListener(`keydown`, onResetFormKeydown);
 
-window.form.fileHouseChooser.addEventListener(`change`, () => {
-  window.form.matchOfHouse();
+const onSaveSuccess = () => {
+  window.open.disactivatePage();
+  window.error.onLoadSuccessMessage();
+  cleanForm();
   window.move.mapPinMain.addEventListener(`click`, onMainPinClick);
   window.move.mapPinMain.addEventListener(`keydown`, onMainPinKeydown);
-});
+};
 
 document.querySelector(`.ad-form`).addEventListener(`submit`, (evt) => {
   evt.preventDefault();
-  window.form.onAdSubmit();
-  cleanForm();
+  window.backend.save(new FormData(document.querySelector(`.ad-form`)), onSaveSuccess, window.error.onLoadFormFailMessage);
+  // window.backend.save(window.form.newData, onSaveSuccess, window.error.onLoadFormFailMessage);
 });
-
-resetForm.addEventListener(`click`, onResetFormClick);
-resetForm.addEventListener(`keydown`, onResetFormKeydown);
