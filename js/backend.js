@@ -34,27 +34,6 @@ const onXhrLoad = (xhr, onLoad, onError) => {
   }
 };
 
-// const loadOrSaveXhr = (method, onLoad, onError, url, data) => {
-//   const xhr = new XMLHttpRequest();
-//   xhr.responseType = `json`;
-
-//   xhr.addEventListener(`load`, onXhrLoad.bind(null, xhr, onLoad, onError));
-
-//   xhr.timeout = TIMEOUT;
-
-//   xhr.addEventListener(`timeout`, () => {
-//     onError(`Запрос не успел выполниться за ${xhr.timeout} мс`);
-//   });
-
-//   xhr.addEventListener(`error`, () => {
-//     window.errorSuccess.onLoadFailMessage(`${StatusCode[xhr.status]}`);
-//     window.open.disactivatePage();
-//   });
-
-//   xhr.open(method, url);
-//   xhr.send(data);
-// };
-
 const loadOrSaveXhr = (request, onLoad, onError) => {
   request.responseType = `json`;
 
@@ -78,8 +57,6 @@ const load = (onLoad, onError) => {
 
   xhr.open(`GET`, Url.URL_DATA);
   xhr.send();
-
-  // loadOrSaveXhr(`GET`, onLoad, onError, Url.URL_DATA);
 };
 
 const save = (data, onLoad, onError) => {
@@ -93,8 +70,6 @@ const save = (data, onLoad, onError) => {
 
   xhr.open(`POST`, Url.URL);
   xhr.send(data);
-
-  // loadOrSaveXhr(`POST`, onLoad, onError, Url.URL, data);
 };
 
 window.backend = {

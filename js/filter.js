@@ -36,7 +36,7 @@ const filterByFeatures = (element) => {
   const checkedInputs = housingFeatures.querySelectorAll(`input[type=checkbox]:checked`);
   const checkedFeatures = [].map.call(checkedInputs, (input) => input.value);
 
-  return checkedFeatures.every((el) => features.includes(el));
+  return checkedFeatures.every((item) => features.includes(item));
 };
 
 const debouncedRenderSetOfPins = window.debounce(window.render.displayPins);

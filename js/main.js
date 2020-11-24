@@ -99,5 +99,4 @@ const onSaveSuccess = () => {
 document.querySelector(`.ad-form`).addEventListener(`submit`, (evt) => {
   evt.preventDefault();
   window.backend.save(new FormData(document.querySelector(`.ad-form`)), onSaveSuccess, window.errorSuccess.onLoadFormFailMessage);
-  // window.backend.save(window.form.newData, onSaveSuccess, window.errorSuccess.onLoadFormFailMessage);
 });

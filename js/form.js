@@ -208,10 +208,7 @@ const onTimeoutFormChange = () => {
 timeinForm.addEventListener(`change`, onTimeinFormChange);
 timeoutForm.addEventListener(`change`, onTimeoutFormChange);
 
-// const newData = new FormData(adForm);
-
 window.form = {
-  // newData,
   priceTypeValue,
   fileAvatarChooser,
   fileHouseChooser,
