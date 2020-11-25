@@ -5,7 +5,7 @@ const mapFiltersSelectsForActive = document.querySelectorAll(`select`);
 const mapFiltersFeaturesForActive = document.querySelectorAll(`input`);
 const resetForm = document.querySelector(`.ad-form__reset`);
 
-const abledElements = (elements) => {
+const ableElements = (elements) => {
   for (const element of elements) {
     if (element.tagName === `INPUT`) {
       element.removeAttribute(`disabled`, `disabled`);
@@ -32,9 +32,9 @@ const activatePage = () => {
 
   document.querySelector(`.ad-form`).classList.remove(`ad-form--disabled`);
   document.querySelector(`.map`).classList.remove(`map--faded`);
-  abledElements(adFormFields);
-  abledElements(mapFiltersSelectsForActive);
-  abledElements(mapFiltersFeaturesForActive);
+  ableElements(adFormFields);
+  ableElements(mapFiltersSelectsForActive);
+  ableElements(mapFiltersFeaturesForActive);
   window.move.addressForm.value = `${Math.round(window.open.FormAddressValue.LEFT)}, ${Math.round(window.open.FormAddressValue.TOP)}`;
   window.move.mapPinMain.querySelector(`img`).draggable = `true`;
 };

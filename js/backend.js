@@ -8,29 +8,11 @@ const Url = {
   URL: `https://21.javascript.pages.academy/keksobooking`,
 };
 
-const StatusCode = {
-  0: `Ошибка сети, данные не загрузились`,
-  102: `Пользователь отменил запрос`,
-  400: `Неверный запрос`,
-  401: `Пользователь не авторизован`,
-  404: `Ничего не найдено`,
-  500: `Internal Server Error`
-};
-
 const onXhrLoad = (xhr, onLoad, onError) => {
-  let error;
-  switch (xhr.status) {
-    case SUCCESS_REQUEST:
-      onLoad(xhr.response);
-      break;
-    case (xhr.status) : error = StatusCode[xhr.status];
-      break;
-    default:
-      error = `Cтатус ответа: ${xhr.status} ${xhr.statusText}`;
-  }
-
-  if (error) {
-    onError(error);
+  if (xhr.status === SUCCESS_REQUEST) {
+    onLoad(xhr.response);
+  } else {
+    onError(`Статус ответа: ${xhr.status} ${xhr.statusText}`);
   }
 };
 
@@ -51,7 +33,7 @@ const load = (onLoad, onError) => {
   loadOrSaveXhr(xhr, onLoad, onError);
 
   xhr.addEventListener(`error`, () => {
-    window.errorSuccess.onLoadFailMessage(`${StatusCode[xhr.status]}`);
+    window.errorSuccess.onLoadFailMessage(`Ошибка сети, данные не загрузились`);
     window.open.disactivatePage();
   });
 

@@ -24,7 +24,7 @@ const priceTypeValueDefault = {
   'palace': 10000
 };
 
-const disabledElements = (elements) => {
+const disableElements = (elements) => {
   for (const element of elements) {
     if (element.tagName === `INPUT`) {
       element.setAttribute(`disabled`, `disabled`);
@@ -40,9 +40,9 @@ const disabledElements = (elements) => {
 };
 
 const openPage = () => {
-  disabledElements(document.querySelector(`.ad-form`).children);
-  disabledElements(mapFiltersSelects);
-  disabledElements(mapFiltersFeatures);
+  disableElements(document.querySelector(`.ad-form`).children);
+  disableElements(mapFiltersSelects);
+  disableElements(mapFiltersFeatures);
   document.querySelector(`#address`).value = `${Math.round(FormAddressValue.LEFT)}, ${Math.round(FormAddressValue.TOP_INITIAL)}`;
   document.querySelector(`#address`).setAttribute(`readonly`, `readonly`);
   const type = selectType.value;

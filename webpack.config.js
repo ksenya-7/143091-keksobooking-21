@@ -3,7 +3,6 @@ const path = require("path");
 module.exports = {
   entry: [
     "./js/utils.js",
-    "./js/backend.js",
     "./js/debounce.js",
     "./js/error-success.js",
     "./js/view.js",
@@ -12,6 +11,7 @@ module.exports = {
     "./js/move.js",
     "./js/filter.js",
     "./js/open.js",
+    "./js/backend.js",
     "./js/form.js",
     "./js/main.js"
   ],

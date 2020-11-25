@@ -62,7 +62,7 @@ const capacityGuestValue = {
 };
 
 // загрузка внешнего файла
-const matchElement = (preview, file) => {
+const loadPhoto = (preview, file) => {
   const reader = new FileReader();
 
   reader.addEventListener(`load`, () => {
@@ -72,7 +72,7 @@ const matchElement = (preview, file) => {
   reader.readAsDataURL(file);
 };
 
-const matchOfAvatar = () => {
+const loadPhotoOfAvatar = () => {
   let matchesAvatar = true;
   const fileAvatar = fileAvatarChooser.files[0];
   const fileName = fileAvatar.name.toLowerCase();
@@ -80,13 +80,13 @@ const matchOfAvatar = () => {
   matchesAvatar = FILE_TYPES.some((it) => fileName.endsWith(it));
   if (matchesAvatar) {
     previewAvatar.src = ``;
-    matchElement(previewAvatar, fileAvatar);
+    loadPhoto(previewAvatar, fileAvatar);
   } else {
     window.errorSuccess.onLoadFailMessage(`Ошибка загрузки файла`);
     previewAvatar.src = `img/muffin-grey.svg`;
   }
 };
-const matchOfHouse = () => {
+const loadPhotoOfHouse = () => {
   let matchesHouse = true;
   const fileHouse = fileHouseChooser.files[0];
   const fileName = fileHouse.name.toLowerCase();
@@ -101,14 +101,14 @@ const matchOfHouse = () => {
     const previewHouseBlock = previewHouseBlockTemplate.cloneNode(true);
     previewHouseBlock.append(previewHouse);
     photoContainer.append(previewHouseBlock);
-    matchElement(previewHouse, fileHouse);
+    loadPhoto(previewHouse, fileHouse);
   } else {
     window.errorSuccess.onLoadFailMessage(`Ошибка загрузки файла`);
   }
 };
 
-fileAvatarChooser.addEventListener(`change`, matchOfAvatar);
-fileHouseChooser.addEventListener(`change`, matchOfHouse);
+fileAvatarChooser.addEventListener(`change`, loadPhotoOfAvatar);
+fileHouseChooser.addEventListener(`change`, loadPhotoOfHouse);
 
 // валидация цены и типа
 const validateTypeAndPrice = () => {
@@ -209,9 +209,5 @@ timeinForm.addEventListener(`change`, onTimeinFormChange);
 timeoutForm.addEventListener(`change`, onTimeoutFormChange);
 
 window.form = {
-  priceTypeValue,
-  fileAvatarChooser,
-  fileHouseChooser,
-  matchOfAvatar,
-  matchOfHouse
+  priceTypeValue
 };
